@@ -6,7 +6,7 @@
 
     <groupId>net.sf</groupId>
     <artifactId>classifier4j-parent</artifactId>
-    <version>0.0.7-SNAPSHOT</version>
+    <version>0.7-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
         <module>core</module>

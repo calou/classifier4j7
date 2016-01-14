@@ -6,7 +6,7 @@
     <parent>
         <groupId>net.sf</groupId>
         <artifactId>classifier4j-parent</artifactId>
-        <version>0.0.7-SNAPSHOT</version>
+        <version>0.7-SNAPSHOT</version>
     </parent>
     <artifactId>classifier4j-optional</artifactId>
     <packaging>jar</packaging>
