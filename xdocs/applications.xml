@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <author email="nicklothian at users dot sourceforge dot net">Nick Lothian</author>
+    <title>Classifier4J</title>
+  </properties>
+  <meta name="keyword" content="java, Bayesian"/>
+<body>
+	<section name="Applications using Classifer4J">
+		<p>If you use Classifer4J in project and would like to be listed here, please contact
+		<a href="mailto:nicklothian at users dot sourceforge dot net">me</a> or let me know via
+		<a href="mail-lists.html">the mailing list</a>.
+		</p>
+
+		<p>Some possible uses I would like to investigate include anti-spam, blog classification and search engine
+		improvement</p>
+	</section>
+</body>
+</document>

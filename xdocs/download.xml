@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <author email="nicklothian at users dot sourceforge dot net">Nick Lothian</author>
+    <title>Classifier4J</title>
+  </properties>
+  <meta name="keyword" content="java, Bayesian"/>
+<body>
+	<section name="Download Classifer4J">
+		<p>Classifier4J can be <a href="http://sourceforge.net/project/showfiles.php?group_id=79523">downloaded from Sourceforge</a>.</p>
+		<p>There are a number of options for downloading Classifier4J (in all cases, substitute <i>???</i> for the correction version number):
+		<ul>
+			<li>The <i>Classifier4J-???.jar</i> release package contains just the Classifier4J binaries.</li>
+			<li>The <i>Classifier4J-Optional-???.jar</i> release package contains the Classifier4J-Optional binaries.</li>
+			<li><i>Classifier4J-???-dist.zip</i> contains everthing needed to build Classifier4J.</li>
+		</ul>
+		</p>
+	</section>
+</body>
+</document>

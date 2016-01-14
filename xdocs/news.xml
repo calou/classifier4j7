@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <author email="nicklothian at users dot sourceforge dot net">Nick Lothian</author>
+    <title>Classifier4J</title>
+  </properties>
+  <meta name="keyword" content="java, Bayesian"/>
+<body>
+	<section name="Releases">
+		<subsection name="Version 0.6 - 05 Feb 2005">
+		    <p>A long time since the last release. This new release introduces something I've wanted to write for a long
+            time - a Vector Space Search style classifier.</p>
+			<p>Classifier4J 0.6 introduces a new VectorClassifier and revises the build structure.
+                <ul>
+                    <li>VectorClassifier is a type of classifier. See <a href="usage.html">the usage guide</a> for details.</li>
+                    <li>Maven is now used completely for the build. The CVS module has changed to "newbuild".</li>
+                </ul>
+            </p>
+		</subsection>
+		<subsection name="Version 0.51 - 30 May 2004">
+			<p>Classifier4J 0.51 is a bug fix for 0.5.
+                <ul>
+                    <li>JDBCWordsDataSource now works correctly on databases that are case sensitive WRT to table names.</li>
+                    <li>CustomizableStopWordProvider now correctly allows customization of the word list.</li>
+                </ul>
+            </p>
+		</subsection>
+		<subsection name="Version 0.5 - 17 December 2003">
+			<p>Classifier4J version 0.5's improvements come from suggestions from the community. Some of these worth noting are:
+                <ul>
+                    <li>JDBCWordsDataSource now properly stored the connection info set in the constructor (bug)</li>
+                    <li>New DataSourceJDBCConnectionManager</li>
+                    <li>New SimpleHTMLTokenizer</li>
+                    <li>New CustomizableStopWordProvider</li>
+                    <li>JDBCWordsDataSource now truncates any words longer than 255 characters</li>
+                    <li>SimpleWordsDataSource is now Serializable</li>
+                    <li>Removal of dependancy on commons-lang</li>
+                </ul>
+            </p>
+		</subsection>
+		<subsection name="Version 0.4">
+			<p>Classifier4J Version 0.4 has many enhancements over version 0.3. Most of these are internal, and will allow us to do better things in the future.</p>
+			<p>Apart from those changes, some noteworthy additions are:
+				<ul>
+					<li>The addition of a ISummariser interface, which supports text summary. A sample <a href="http://www.mackmo.com/summary/">web-app is available online</a>.</li>
+					<li>A Classifier4J-optional jar, which contains some simple demos and a <a href="http://jdbm.sourceforge.net/">JDBM</a> datasource (for you performance freaks).</li>
+				</ul>
+			</p>
+		</subsection>
+		<subsection name="Version 0.3">
+			<p>Classifer4J Version 0.3 is the first release recommened for non-experimental use. Some of the many improvements include:
+				<ul>
+					<li>The ability to train the BayesianClassifier via a ITrainable interface, rather than requiring updates
+					to the datasource.</li>
+					<li>Performance and design improvements to the JDBCWordDataSource.</li>
+					<li>Stop Word support.</li>
+					<li>Internal Refactoring, particually with respect to the WordProbability object (thanks to Peter Leschev).</li>
+				</ul>
+			</p>
+		</subsection>
+
+		<subsection name="Version 0.2">
+			<p>Classifer4J Version 0.2 is the first official release. It doesn't come with any demos, and
+			was released more to familiarise myself with Sourceforge than because of any great technological
+			breakthrough.
+			</p>
+		</subsection>
+	</section>
+</body>
+</document>

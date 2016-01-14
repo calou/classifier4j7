@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <author email="nicklothian at users dot sourceforge dot net">Nick Lothian</author>
+    <title>Classifier4J</title>
+  </properties>
+  <meta name="keyword" content="java, Bayesian, text"/>
+<body>
+
+<section name="Classifier4J">
+	<p>
+	Classifier4J is a Java library designed to do text classification.
+	It comes with an implementation of a Bayesian classifier, and now has some other features, including a text summary facility.
+	</p>
+
+	<p>I usually keep my <a href="http://www.mackmo.com/nick/blog/">blog</a> updated with development progress and
+	future directions.</p>
+
+	<subsection name="Classifier4J Version 0.6Available (05 Feb 2005)">
+		<p>Classifier4J 0.51 is available for <a href="download.html">download</a>. See the <a href="news.html">news</a> for further information.
+        Note that the cvs module name has changed (to newbuild) if you retrieve it via CVS.</p>
+	</subsection>
+
+	<subsection name="Classifier4J Version 0.51 Available (30 May 2004)">
+		<p>Classifier4J 0.51 is available for <a href="download.html">download</a>. See the <a href="news.html">news</a> for further information.</p>
+	</subsection>
+
+	<subsection name="Classifier4J Version 0.5 Available (17 Dec 2003)">
+		<p>Classifier4J 0.5 is available for <a href="download.html">download</a>. See the <a href="news.html">news</a> for further information.</p>
+	</subsection>
+
+	<subsection name="Classifier4J Version 0.4 Available (6 Aug 2003)">
+		<p>Classifier4J 0.4 is available for <a href="download.html">download</a>. See the <a href="news.html">news</a> for further information.</p>
+	</subsection>
+</section>
+
+</body>
+</document>
