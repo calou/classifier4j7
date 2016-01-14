@@ -64,7 +64,7 @@ import java.util.Map;
  */
 public class SimpleWordsDataSource implements IWordsDataSource, Serializable {
 
-    private Map words = new HashMap();
+    private Map<String, WordProbability> words = new HashMap<>();
 
     public void setWordProbability(WordProbability wp) {
         words.put(wp.getWord(), wp);
@@ -74,14 +74,10 @@ public class SimpleWordsDataSource implements IWordsDataSource, Serializable {
      * @see net.sf.classifier4J.bayesian.IWordsDataSource#getWordProbability(java.lang.String)
      */
     public WordProbability getWordProbability(String word) {
-        if (words.containsKey(word)) {
-            return (WordProbability) words.get(word);
-        } else {
-            return null;
-        }
+        return words.get(word);
     }
 
-    public Collection getAll() {
+    public Collection<WordProbability> getAll() {
         return words.values();
     }
 
@@ -89,7 +85,7 @@ public class SimpleWordsDataSource implements IWordsDataSource, Serializable {
      * @see net.sf.classifier4J.bayesian.IWordsDataSource#addMatch(java.lang.String)
      */
     public void addMatch(String word) {
-        WordProbability wp = (WordProbability) words.get(word);
+        WordProbability wp = words.get(word);
         if (wp == null) {
             wp = new WordProbability(word, 1, 0);
         } else {
@@ -102,7 +98,7 @@ public class SimpleWordsDataSource implements IWordsDataSource, Serializable {
      * @see net.sf.classifier4J.bayesian.IWordsDataSource#addNonMatch(java.lang.String)
      */
     public void addNonMatch(String word) {
-        WordProbability wp = (WordProbability) words.get(word);
+        WordProbability wp = words.get(word);
         if (wp == null) {
             wp = new WordProbability(word, 0, 1);
         } else {
@@ -110,5 +106,4 @@ public class SimpleWordsDataSource implements IWordsDataSource, Serializable {
         }
         setWordProbability(wp);
     }
-
 }

@@ -64,6 +64,8 @@ import net.sf.classifier4J.ITokenizer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.util.Arrays;
+
 /*
  * @author Nick Lothian
  * @author Peter Leschev
@@ -254,7 +256,7 @@ public class BayesianClassifierTest extends TestCase {
 		
 		BayesianClassifier classifier = new BayesianClassifier();
 		 		
-		assertEquals(result, classifier.calculateOverallProbability(wps), errorMargin);
+		assertEquals(result, classifier.calculateOverallProbability(Arrays.asList(wps)), errorMargin);
 	}
 
 

@@ -107,11 +107,9 @@ public class DefaultTokenizer implements ITokenizer {
      * @param string set the custom regular expression to use for {@link #tokenize(String)}. Must not be null.
      */
     public void setCustomTokenizerRegExp(String string) {
-
         if (string == null) {
             throw new IllegalArgumentException("Regular Expression string must not be null");
         }
-
         customTokenizerRegExp = string;
     }
 
@@ -121,18 +119,14 @@ public class DefaultTokenizer implements ITokenizer {
      * and {@link #BREAK_ON_WHITESPACE}
      */
     public void setTokenizerConfig(int tokConfig) {
-
         if (tokConfig != BREAK_ON_WORD_BREAKS && tokConfig != BREAK_ON_WHITESPACE) {
             throw new IllegalArgumentException("tokenConfiguration must be either BREAK_ON_WORD_BREAKS or BREAK_ON_WHITESPACE");
         }
-
         tokenizerConfig = tokConfig;
     }
 
     public String[] tokenize(String input) {
-
         String regexp = "";
-
         if (customTokenizerRegExp != null) {
             regexp = customTokenizerRegExp;
         } else if (tokenizerConfig == BREAK_ON_WORD_BREAKS) {
@@ -146,16 +140,13 @@ public class DefaultTokenizer implements ITokenizer {
         if (input != null) {
             String[] words = input.split(regexp);
             return words;
-
         } else {
             return new String[0];
         }
     }
 
     public String toString() {
-
         ToStringBuilder toStringBuilder = new ToStringBuilder(this);
-
         if (customTokenizerRegExp != null) {
             toStringBuilder = toStringBuilder.append("customTokenizerRegExp", customTokenizerRegExp);
         } else if (tokenizerConfig == BREAK_ON_WORD_BREAKS) {
@@ -163,7 +154,6 @@ public class DefaultTokenizer implements ITokenizer {
         } else if (tokenizerConfig == BREAK_ON_WHITESPACE) {
             toStringBuilder = toStringBuilder.append("tokenizerConfig", "BREAK_ON_WHITESPACE");
         }
-
         return toStringBuilder.toString();
     }
 }

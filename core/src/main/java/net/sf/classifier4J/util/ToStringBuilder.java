@@ -54,30 +54,28 @@ package net.sf.classifier4J.util;
 import java.io.Serializable;
 
 public class ToStringBuilder implements Serializable {
-    StringBuffer output = new StringBuffer("");
+    private StringBuilder output = new StringBuilder();
 
-    /**
-     * @param classifier
-     */
+
     public ToStringBuilder(Object o) {
         if (o == null) {
             throw new IllegalArgumentException("Object cannot be null");
         }
-        output = new StringBuffer(o.getClass().getName() + " " );
+        output = new StringBuilder(o.getClass().getName()).append(" ");
     }
 
 
     public ToStringBuilder append(String name, Object o) {
         if (o == null) {
-            output.append(name + ": null");    
+            output.append(name).append(": null");
         } else {
-            output.append(name + ": " + o.toString());
+            output.append(name).append(": ").append(o.toString());
         }
         return this;     
     }
     
     public ToStringBuilder append(String name, double num) {
-        output.append(name + ": " + num);
+        output.append(name).append(": ").append(num);
         return this;
     }
     
