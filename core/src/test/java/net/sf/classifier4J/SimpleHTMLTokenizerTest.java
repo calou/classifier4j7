@@ -53,48 +53,28 @@
 
 package net.sf.classifier4J;
 
-import junit.framework.TestCase;
 
+import org.junit.Before;
+import org.junit.Test;
 
-public class SimpleHTMLTokenizerTest extends TestCase {
-    SimpleHTMLTokenizer tokenizer = null;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
-    /**
-     * Constructor for SimpleHTMLTokenizerTest.
-     * @param arg0
-     */
-    public SimpleHTMLTokenizerTest(String arg0) {
-        super(arg0);
-    }
+public class SimpleHTMLTokenizerTest {
+    private SimpleHTMLTokenizer tokenizer;
 
-    /*
-     * @see TestCase#setUp()
-     */
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         tokenizer = new SimpleHTMLTokenizer();
     }
 
-    /*
-     * @see TestCase#tearDown()
-     */
-    protected void tearDown() throws Exception {
-        tokenizer = null;
-    }
-
+    @Test
     public void testTokenize() {
-        String input = "<h1>This is in an html tag &gt;</h1>";
-        String[] expected = { "This", "is", "in", "an", "html", "tag"};
-        
-        String[] output = tokenizer.tokenize(input);
-        assertNotNull(output);
-        assertEquals(expected.length, output.length); 
-        
-        for (int i = 0; i < output.length; i++) {
-            assertEquals(expected[i], output[i]);
-        }
-        
+        String[] output = tokenizer.tokenize("<h1>This is in an html tag &gt;</h1>");
+        assertThat(output).containsExactly("This", "is", "in", "an", "html", "tag");
     }
 
+    @Test
     public void testResolveEntities() {
         String normalString = "this is a normal string";
         assertEquals(normalString, tokenizer.resolveEntities(normalString));
@@ -102,5 +82,4 @@ public class SimpleHTMLTokenizerTest extends TestCase {
         String withEnt = "this includes a non-breaking space ";
         assertEquals(withEnt + " ", tokenizer.resolveEntities(withEnt + "&nbsp;"));
     }
-
 }
