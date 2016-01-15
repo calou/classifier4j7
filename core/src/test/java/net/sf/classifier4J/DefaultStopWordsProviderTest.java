@@ -51,38 +51,26 @@
 
 package net.sf.classifier4J;
 
-import junit.framework.TestCase;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-public class DefaultStopWordsProviderTest extends TestCase {
-	IStopWordProvider swp = null;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-	/**
-	 * Constructor for DefaultStopWordsProviderTest.
-	 * @param arg0
-	 */
-	public DefaultStopWordsProviderTest(String arg0) {
-		super(arg0);
-	}
+public class DefaultStopWordsProviderTest {
+	private IStopWordProvider swp;
 
-	/*
-	 * @see TestCase#setUp()
-	 */
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		swp = new DefaultStopWordsProvider();
 	}
 
-	/*
-	 * @see TestCase#tearDown()
-	 */
-	protected void tearDown() throws Exception {
-		swp = null;
-	}
-
+	@Test
 	public void testIsStopWord() {
 		assertTrue(swp.isStopWord("a"));
 		assertFalse(swp.isStopWord("nick"));
 		assertTrue(swp.isStopWord("me"));
 	}
-
 }
