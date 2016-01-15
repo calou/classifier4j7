@@ -63,40 +63,39 @@ import junit.framework.TestCase;
  */
 public class UtilitiesTest extends TestCase {
 
-	String sentence = "Hello there hello again and hello again.";
+	private String sentence = "Hello there hello again and hello again.";
 
 	public void testGetWordFrequency() {
-
 		// standard test
 		Map result = Utilities.getWordFrequency(sentence);
 		assertNotNull(result);
 		assertEquals(2, result.size());
 		assertNotNull(result.get("hello"));
-		assertEquals(new Integer(3), (Integer) result.get("hello"));
-		//assertEquals(new Integer(1), (Integer)result.get("there"));
-		//assertEquals(new Integer(1), (Integer)result.get("and"));
-		assertEquals(new Integer(2), (Integer) result.get("again"));
+		assertEquals(new Integer(3),  result.get("hello"));
+		//assertEquals(new Integer(1), result.get("there"));
+		//assertEquals(new Integer(1), result.get("and"));
+		assertEquals(new Integer(2),  result.get("again"));
 
 		// test case sensitivity
 		result = Utilities.getWordFrequency(sentence, true);
 		assertNotNull(result);
 		assertEquals(3, result.size());
 		assertNotNull(result.get("hello"));
-		assertEquals(new Integer(2), (Integer) result.get("hello"));
-		assertEquals(new Integer(1), (Integer) result.get("Hello"));
-		//assertEquals(new Integer(1), (Integer)result.get("there"));
-		//assertEquals(new Integer(1), (Integer)result.get("and"));
-		assertEquals(new Integer(2), (Integer) result.get("again"));
+		assertEquals(new Integer(2),  result.get("hello"));
+		assertEquals(new Integer(1),  result.get("Hello"));
+		//assertEquals(new Integer(1), result.get("there"));
+		//assertEquals(new Integer(1), result.get("and"));
+		assertEquals(new Integer(2),  result.get("again"));
 
 		// test without a stop word provider
 		result = Utilities.getWordFrequency(sentence, false, new DefaultTokenizer(), null);
 		assertNotNull(result);
 		assertEquals(4, result.size());
 		assertNotNull(result.get("hello"));
-		assertEquals(new Integer(3), (Integer) result.get("hello"));
-		assertEquals(new Integer(1), (Integer) result.get("there"));
-		assertEquals(new Integer(1), (Integer) result.get("and"));
-		assertEquals(new Integer(2), (Integer) result.get("again"));
+		assertEquals(new Integer(3),  result.get("hello"));
+		assertEquals(new Integer(1),  result.get("there"));
+		assertEquals(new Integer(1),  result.get("and"));
+		assertEquals(new Integer(2),  result.get("again"));
 
 	}
 

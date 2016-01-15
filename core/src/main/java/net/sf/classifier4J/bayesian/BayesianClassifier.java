@@ -331,15 +331,17 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
     }
 
     private boolean isClassifiableWord(String word) {
+        /*
         if (word == null || "".equals(word) || stopWordProvider.isStopWord(word)) {
             return false;
         } else {
             return true;
         }
+        */
+        return word != null && !"".equals(word) && !stopWordProvider.isStopWord(word);
     }
 
     protected static double normaliseSignificance(double sig) {
-
         if (Double.compare(IClassifier.UPPER_BOUND, sig) < 0) {
             return IClassifier.UPPER_BOUND;
         } else if (Double.compare(IClassifier.LOWER_BOUND, sig) > 0) {

@@ -51,27 +51,24 @@
 
 package net.sf.classifier4J.bayesian;
 
-import java.io.Serializable;
-
-import net.sf.classifier4J.IClassifier;
 import net.sf.classifier4J.ICategorisedClassifier;
-import net.sf.classifier4J.util.*;
+import net.sf.classifier4J.IClassifier;
 import net.sf.classifier4J.util.CompareToBuilder;
 import net.sf.classifier4J.util.EqualsBuilder;
+import net.sf.classifier4J.util.HashCodeBuilder;
 import net.sf.classifier4J.util.ToStringBuilder;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.io.Serializable;
 
 /**
  * Represents the probability of a particular word. The user of this object
  * can either:
  * <ol>
- * 		<li>Set a specific probability for a particular word <I>or</I></li>
- * 		<li>Define the matching and non-matching counts for the particular word. 
- *        This class then calculates the probability for you.</li>
+ * <li>Set a specific probability for a particular word <I>or</I></li>
+ * <li>Define the matching and non-matching counts for the particular word.
+ * This class then calculates the probability for you.</li>
  * </ol>
- * 
+ *
  * @author Nick Lothian
  * @author Peter Leschev
  */
@@ -163,59 +160,33 @@ public class WordProbability implements Comparable, Serializable {
     }
 
     private void calculateProbability() {
-        // the logger can't be a field because this class might be serialized 
-        Log log = LogFactory.getLog(this.getClass());
-
-        String method = "calculateProbability() ";
-
-        if (log.isDebugEnabled()) {
-            log.debug(method + "START");
-
-            log.debug(method + "matchingCount = " + matchingCount);
-            log.debug(method + "nonMatchingCount = " + nonMatchingCount);
-        }
-
-        double result = IClassifier.NEUTRAL_PROBABILITY;
-
+        final double result;
         if (matchingCount == 0) {
-            if (nonMatchingCount == 0) {
-                result = IClassifier.NEUTRAL_PROBABILITY;
-            } else {
-                result = IClassifier.LOWER_BOUND;
-            }
+            result = nonMatchingCount == 0 ? IClassifier.NEUTRAL_PROBABILITY : IClassifier.LOWER_BOUND;
         } else {
             result = BayesianClassifier.normaliseSignificance((double) matchingCount / (double) (matchingCount + nonMatchingCount));
         }
-
         probability = result;
-
-        if (log.isDebugEnabled()) {
-            log.debug(method + "END Calculated [" + probability + "]");
-        }
     }
 
     /**
-         * @return
-         */
+     * @return
+     */
     public double getProbability() {
         return probability;
     }
 
     public long getMatchingCount() {
-
         if (matchingCount == UNDEFINED) {
             throw new UnsupportedOperationException("MatchingCount has not been defined");
         }
-
         return matchingCount;
     }
 
     public long getNonMatchingCount() {
-
         if (nonMatchingCount == UNDEFINED) {
             throw new UnsupportedOperationException("nonMatchingCount has not been defined");
         }
-
         return nonMatchingCount;
     }
 

@@ -73,11 +73,11 @@ import java.util.TreeSet;
  */
 public class Utilities {
 
-    public static Map getWordFrequency(String input) {
+    public static Map<String, Integer> getWordFrequency(String input) {
         return getWordFrequency(input, false);
     }
 
-    public static Map getWordFrequency(String input, boolean caseSensitive) {
+    public static Map<String, Integer> getWordFrequency(String input, boolean caseSensitive) {
         return getWordFrequency(input, caseSensitive, new DefaultTokenizer(), new DefaultStopWordsProvider());
     }
 
@@ -90,11 +90,8 @@ public class Utilities {
      * @param stopWordsProvider
      * @return
      */
-    public static Map getWordFrequency(String input, boolean caseSensitive, ITokenizer tokenizer, IStopWordProvider stopWordsProvider) {
-        String convertedInput = input;
-        if (!caseSensitive) {
-            convertedInput = input.toLowerCase();
-        }
+    public static Map<String, Integer> getWordFrequency(String input, boolean caseSensitive, ITokenizer tokenizer, IStopWordProvider stopWordsProvider) {
+        String convertedInput = caseSensitive ? input : input.toLowerCase();
 
         // tokenize into an array of words
         String[] words = tokenizer.tokenize(convertedInput);
@@ -102,25 +99,24 @@ public class Utilities {
 
         String[] uniqueWords = getUniqueWords(words);
 
-        Map result = new HashMap();
-        for (int i = 0; i < uniqueWords.length; i++) {
+        Map<String, Integer> result = new HashMap<>();
+        for (String w : uniqueWords) {
             if (stopWordsProvider == null) {
                 // no stop word provider, so add all words
-                result.put(uniqueWords[i], new Integer(countWords(uniqueWords[i], words)));
-            } else if (isWord(uniqueWords[i]) && !stopWordsProvider.isStopWord(uniqueWords[i])) {
+                result.put(w, countWords(w, words));
+            } else if (isWord(w) && !stopWordsProvider.isStopWord(w)) {
                 // add only words that are not stop words			
-                result.put(uniqueWords[i], new Integer(countWords(uniqueWords[i], words)));
+                result.put(w, countWords(w, words));
             }
         }
-
         return result;
     }
 
-    private static String[] findWordsWithFrequency(Map wordFrequencies, Integer frequency) {
+    private static String[] findWordsWithFrequency(Map<String, Integer> wordFrequencies, Integer frequency) {
         if (wordFrequencies == null || frequency == null) {
             return new String[0];
         } else {
-            List results = new ArrayList();
+            List<String> results = new ArrayList<>();
             Iterator it = wordFrequencies.keySet().iterator();
 
             while (it.hasNext()) {
@@ -129,35 +125,25 @@ public class Utilities {
                     results.add(word);
                 }
             }
-
-            return (String[]) results.toArray(new String[results.size()]);
-
+            return results.toArray(new String[results.size()]);
         }
     }    
     
-    public static Set getMostFrequentWords(int count, Map wordFrequencies) {
-        Set result = new LinkedHashSet();
-
-        Integer max = (Integer) Collections.max(wordFrequencies.values());
-
-        int freq = max.intValue();
+    public static Set<String> getMostFrequentWords(int count, Map<String, Integer> wordFrequencies) {
+        Set<String> result = new LinkedHashSet();
+        int freq = Collections.max(wordFrequencies.values());
         while (result.size() < count && freq > 0) {
             // this is very icky
-            String words[] = findWordsWithFrequency(wordFrequencies, new Integer(freq));
+            String words[] = findWordsWithFrequency(wordFrequencies, freq);
             result.addAll(Arrays.asList(words));
             freq--;
         }
-
         return result;
     }
 
     
     private static boolean isWord(String word) {
-        if (word != null && !word.trim().equals("")) {
-            return true;
-        } else {
-            return false;
-        }
+        return word != null && !word.trim().equals("");
     }
 
     /**
@@ -170,11 +156,11 @@ public class Utilities {
         if (input == null) {
             return new String[0];
         } else {
-            Set result = new TreeSet();
+            Set<String> result = new TreeSet<>();
             for (int i = 0; i < input.length; i++) {
                 result.add(input[i]);
             }
-            return (String[]) result.toArray(new String[result.size()]);
+            return result.toArray(new String[result.size()]);
         }
     }
 
@@ -221,13 +207,8 @@ public class Utilities {
      * @return an array of Strings, each element containing a sentence
      */
     public static String[] getSentences(String input) {
-        if (input == null) {
-            return new String[0];
-        } else {
-            // split on a ".", a "!", a "?" followed by a space or EOL
-            return input.split("(\\.|!|\\?)+(\\s|\\z)");
-        }
-
+        // split on a ".", a "!", a "?" followed by a space or EOL
+        return input == null ? new String[0] : input.split("(\\.|!|\\?)+(\\s|\\z)");
     }
 
     /**
@@ -235,17 +216,13 @@ public class Utilities {
      * replaced with " "
      */
     public static String getString(InputStream is) throws IOException {
-
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        String line = "";
-        StringBuffer stringBuffer = new StringBuffer();
+        String line;
+        StringBuilder sb = new StringBuilder();
         while ((line = reader.readLine()) != null) {
-            stringBuffer.append(line);
-            stringBuffer.append(" ");
+            sb.append(line).append(" ");
         }
-
         reader.close();
-
-        return stringBuffer.toString().trim();
+        return sb.toString().trim();
     }
 }
