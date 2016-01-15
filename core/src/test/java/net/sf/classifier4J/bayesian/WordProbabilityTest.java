@@ -52,151 +52,121 @@
 package net.sf.classifier4J.bayesian;
 
 import net.sf.classifier4J.IClassifier;
+import org.junit.Test;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import junit.framework.TestCase;
-import junit.textui.TestRunner;
+import static org.junit.Assert.*;
 
 /**
  * @author Nick Lothian
  * @author Peter Leschev
  */
-public class WordProbabilityTest extends TestCase {
+public class WordProbabilityTest {
 
-	private Log log = LogFactory.getLog(this.getClass());
-
-	public WordProbabilityTest(String name) {
-		super(name);
-	}
-
-	public void testAccessors() {
-		WordProbability wp = null;
-
-		wp = new WordProbability("", 0.96d);
-		assertEquals("", wp.getWord());
-		try {
-			assertEquals(0, wp.getMatchingCount());
-			fail("Shouldn't be able to obtain matching count when we haven't set them");
-		} catch (UnsupportedOperationException e) {
-			assertTrue(true);
-		}
-		try {
-			assertEquals(0, wp.getNonMatchingCount());
-			fail("Shouldn't be able to obtain matching count when we haven't set them");
-		} catch (UnsupportedOperationException e) {
-			assertTrue(true);
-		}
-		assertEquals(0.96d, wp.getProbability(), 0);
-
-		wp = new WordProbability("aWord", 10, 30);
-		assertEquals("aWord", wp.getWord());
-		assertEquals(10, wp.getMatchingCount());
-		assertEquals(30, wp.getNonMatchingCount());
-		assertEquals(0.25d, wp.getProbability(), 0d);
-                
-                try {
-                    wp.setMatchingCount(-10);
-                    fail("Shouldn't be able to set -ve matchingCount");
-                }
-                catch(IllegalArgumentException e) {
-                    assertTrue(true);
-                }
-                
-                try {
-                    wp.setNonMatchingCount(-10);
-                    fail("Shouldn't be able to set -ve nonMatchingCount");
-                }
-                catch(IllegalArgumentException e) {
-                    assertTrue(true);
-                }
-	}
-
-	public void testCalculateProbability() {
-
-		WordProbability wp = null;
-
-		wp = new WordProbability("", 10, 10);
-		assertEquals(IClassifier.NEUTRAL_PROBABILITY, wp.getProbability(), 0);
-
-		wp = new WordProbability("", 20, 10);
-		assertEquals(0.66, wp.getProbability(), 0.01);
-
-		wp = new WordProbability("", 30, 10);
-		assertEquals(0.75, wp.getProbability(), 0);
-
-		wp = new WordProbability("", 10, 20);
-		assertEquals(0.33, wp.getProbability(), 0.01);
-
-		wp = new WordProbability("", 10, 30);
-		assertEquals(0.25, wp.getProbability(), 0);
-
-		wp = new WordProbability("", 10, 0);
-		assertEquals(IClassifier.UPPER_BOUND, wp.getProbability(), 0);
-
-		wp = new WordProbability("", 100, 1);
-		assertEquals(IClassifier.UPPER_BOUND, wp.getProbability(), 0);
-
-		wp = new WordProbability("", 1000, 1);
-		assertEquals(IClassifier.UPPER_BOUND, wp.getProbability(), 0);
-
-		wp = new WordProbability("", 0, 10);
-		assertEquals(IClassifier.LOWER_BOUND, wp.getProbability(), 0);
-
-		wp = new WordProbability("", 1, 100);
-		assertEquals(IClassifier.LOWER_BOUND, wp.getProbability(), 0);
-
-		wp = new WordProbability("", 1, 1000);
-		assertEquals(IClassifier.LOWER_BOUND, wp.getProbability(), 0);
-	}
-
-	public void testComparator() {
-
-		String method = "testComparator() ";
-
-		WordProbability wp = null;
-		WordProbability wp2 = null;
-
-		wp = new WordProbability("a", 0, 0);
-		wp2 = new WordProbability("b", 0, 0);
-
-		try {
-			wp.compareTo(new Object());
-			fail("Shouldn't be able to compareTo objects other than WordProbability");
-		} catch (ClassCastException e) {
-			assertTrue(true);
-		}
-
-		if (log.isDebugEnabled()) {
-			log.debug(method + "wp.getProbability() " + wp.getProbability());
-			log.debug(method + "wp2.getProbability() " + wp2.getProbability());
-		}
-
-		assertTrue(wp.compareTo(wp2) < 0);
-		assertTrue(wp2.compareTo(wp) > 0);
-	}
-
-        public void testMatchingAndNonMatchingCountRollover() {
-            
-            WordProbability wp = new WordProbability("aWord", Long.MAX_VALUE, Long.MAX_VALUE);
-            try {
-                wp.registerMatch();
-                fail("Should detect rollover");
-            }
-            catch(UnsupportedOperationException e) {
-                assertTrue(true);
-            }
-            try {
-                wp.registerNonMatch();
-                fail("Should detect rollover");
-            }
-            catch(UnsupportedOperationException e) {
-                assertTrue(true);
-            }
+    @Test
+    public void testAccessors() {
+        WordProbability wp = new WordProbability("", 0.96d);
+        assertEquals("", wp.getWord());
+        try {
+            assertEquals(0, wp.getMatchingCount());
+            fail("Shouldn't be able to obtain matching count when we haven't set them");
+        } catch (UnsupportedOperationException e) {
         }
-        
-	public static void main(String[] args) throws Exception {
-		TestRunner.run(WordProbabilityTest.class);
-	}
+        try {
+            assertEquals(0, wp.getNonMatchingCount());
+            fail("Shouldn't be able to obtain matching count when we haven't set them");
+        } catch (UnsupportedOperationException e) {
+        }
+        assertEquals(0.96d, wp.getProbability(), 0);
+
+        wp = new WordProbability("aWord", 10, 30);
+        assertEquals("aWord", wp.getWord());
+        assertEquals(10, wp.getMatchingCount());
+        assertEquals(30, wp.getNonMatchingCount());
+        assertEquals(0.25d, wp.getProbability(), 0d);
+
+        try {
+            wp.setMatchingCount(-10);
+            fail("Shouldn't be able to set -ve matchingCount");
+        } catch (IllegalArgumentException e) {
+        }
+
+        try {
+            wp.setNonMatchingCount(-10);
+            fail("Shouldn't be able to set -ve nonMatchingCount");
+        } catch (IllegalArgumentException e) {
+        }
+    }
+
+    @Test
+    public void testCalculateProbability() {
+
+        WordProbability wp = new WordProbability("", 10, 10);
+        assertEquals(IClassifier.NEUTRAL_PROBABILITY, wp.getProbability(), 0);
+
+        wp = new WordProbability("", 20, 10);
+        assertEquals(0.66, wp.getProbability(), 0.01);
+
+        wp = new WordProbability("", 30, 10);
+        assertEquals(0.75, wp.getProbability(), 0);
+
+        wp = new WordProbability("", 10, 20);
+        assertEquals(0.33, wp.getProbability(), 0.01);
+
+        wp = new WordProbability("", 10, 30);
+        assertEquals(0.25, wp.getProbability(), 0);
+
+        wp = new WordProbability("", 10, 0);
+        assertEquals(IClassifier.UPPER_BOUND, wp.getProbability(), 0);
+
+        wp = new WordProbability("", 100, 1);
+        assertEquals(IClassifier.UPPER_BOUND, wp.getProbability(), 0);
+
+        wp = new WordProbability("", 1000, 1);
+        assertEquals(IClassifier.UPPER_BOUND, wp.getProbability(), 0);
+
+        wp = new WordProbability("", 0, 10);
+        assertEquals(IClassifier.LOWER_BOUND, wp.getProbability(), 0);
+
+        wp = new WordProbability("", 1, 100);
+        assertEquals(IClassifier.LOWER_BOUND, wp.getProbability(), 0);
+
+        wp = new WordProbability("", 1, 1000);
+        assertEquals(IClassifier.LOWER_BOUND, wp.getProbability(), 0);
+    }
+
+    @Test
+    public void testComparator() {
+        WordProbability wp;
+        WordProbability wp2;
+
+        wp = new WordProbability("a", 0, 0);
+        wp2 = new WordProbability("b", 0, 0);
+
+        try {
+            wp.compareTo(new Object());
+            fail("Shouldn't be able to compareTo objects other than WordProbability");
+        } catch (ClassCastException e) {
+        }
+
+        assertTrue(wp.compareTo(wp2) < 0);
+        assertTrue(wp2.compareTo(wp) > 0);
+    }
+
+    @Test
+    public void testMatchingAndNonMatchingCountRollover() {
+
+        WordProbability wp = new WordProbability("aWord", Long.MAX_VALUE, Long.MAX_VALUE);
+        try {
+            wp.registerMatch();
+            fail("Should detect rollover");
+        } catch (UnsupportedOperationException e) {
+            assertTrue(true);
+        }
+        try {
+            wp.registerNonMatch();
+            fail("Should detect rollover");
+        } catch (UnsupportedOperationException e) {
+            assertTrue(true);
+        }
+    }
 }
