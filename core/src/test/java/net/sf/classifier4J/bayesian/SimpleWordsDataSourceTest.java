@@ -51,42 +51,101 @@
 
 package net.sf.classifier4J.bayesian;
 
-import junit.textui.TestRunner;
+import org.junit.Before;
+import org.junit.Test;
 
-public class SimpleWordsDataSourceTest extends AbstractWordsDataSourceSupport {
+import static org.junit.Assert.*;
 
-	/**
-	 * @param arg0
-	 */
-	public SimpleWordsDataSourceTest(String arg0) {
-		super(arg0);
-	}
+public class SimpleWordsDataSourceTest {
+	private IWordsDataSource wordsDataSource;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		wordsDataSource = new SimpleWordsDataSource();
 	}
 
-	protected void tearDown() throws Exception {
-		wordsDataSource = null;
+	@Test
+	public void testEmptySource() throws Exception {
+		WordProbability wp = wordsDataSource.getWordProbability("myWord");
+		assertNull(wp);
 	}
 
-	public void testSetAndGet() throws Exception {	
-		WordProbability wp = null;
-		WordProbability wp2 = null;
+	@Test
+	public void testAddMatch() throws Exception {
+		wordsDataSource.addMatch("myWord");
+		WordProbability wp = wordsDataSource.getWordProbability("myWord");
+		assertNotNull(wp);
+		assertEquals(1, wp.getMatchingCount());
+		assertEquals(0, wp.getNonMatchingCount());
 
-		wp = new WordProbability("myWord", 10, 30);
+		wordsDataSource.addMatch("myWord");
+
+		wp = wordsDataSource.getWordProbability("myWord");
+		assertNotNull(wp);
+		assertEquals(2, wp.getMatchingCount());
+		assertEquals(0, wp.getNonMatchingCount());
+	}
+
+	@Test
+	public void testAddNonMatch() throws Exception {
+		wordsDataSource.addNonMatch("myWord");
+		WordProbability wp = wordsDataSource.getWordProbability("myWord");
+		assertNotNull(wp);
+		assertEquals(0, wp.getMatchingCount());
+		assertEquals(1, wp.getNonMatchingCount());
+
+		wordsDataSource.addNonMatch("myWord");
+
+		wp = wordsDataSource.getWordProbability("myWord");
+		assertNotNull(wp);
+		assertEquals(0, wp.getMatchingCount());
+		assertEquals(2, wp.getNonMatchingCount());
+	}
+
+	@Test
+	public void testAddMultipleMatches() throws Exception {
+		String word = "myWord";
+		int count = 10;
+		for (int i = 0; i < count; i++) {
+			wordsDataSource.addMatch(word);
+		}
+		WordProbability wp = wordsDataSource.getWordProbability(word);
+		assertNotNull(wp);
+		assertEquals(count, wp.getMatchingCount());
+	}
+
+	@Test
+	public void testAddMultipleNonMatches() throws Exception {
+		String word = "myWord";
+		int count = 10;
+		for (int i = 0; i < count; i++) {
+			wordsDataSource.addNonMatch(word);
+		}
+		WordProbability wp = wordsDataSource.getWordProbability(word);
+		assertNotNull(wp);
+		assertEquals(count, wp.getNonMatchingCount());
+	}
+
+	@Test
+	public void testMultipleWrites() throws Exception {
+		long startTime = System.currentTimeMillis();
+
+		String word = "myWord";
+		int count = 500;
+		for (int i = 0; i < count; i++) {
+			wordsDataSource.addNonMatch(word + count);
+		}
+		long duration = System.currentTimeMillis() - startTime;
+		System.out.println("Duration : " + duration + " ms");
+	}
+
+	@Test
+	public void testSetAndGet() throws Exception {
+		WordProbability wp = new WordProbability("myWord", 10, 30);
 
 		((SimpleWordsDataSource)wordsDataSource).setWordProbability(wp);
-		wp2 = wordsDataSource.getWordProbability("myWord");
+		WordProbability wp2 = wordsDataSource.getWordProbability("myWord");
 		assertNotNull(wp2);
-
 		assertEquals(wp, wp2);
 	}
-
-	public static void main(String[] args) throws Exception {
-		TestRunner.run(SimpleWordsDataSourceTest.class);
-	}
-
-
 }
