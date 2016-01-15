@@ -53,11 +53,12 @@ package net.sf.classifier4J.bayesian;
 
 import java.io.IOException;
 
+import jdbm.RecordManager;
+import jdbm.RecordManagerFactory;
 import jdbm.btree.BTree;
 import jdbm.helper.MRU;
-import jdbm.helper.ObjectCache;
 import jdbm.helper.StringComparator;
-import jdbm.recman.RecordManager;
+import jdbm.recman.CacheRecordManager;
 import net.sf.classifier4J.ICategorisedClassifier;
 
 import org.apache.commons.logging.Log;
@@ -67,7 +68,7 @@ public class JDBMWordsDataSource implements ICategorisedWordsDataSource {
 	Log log = LogFactory.getLog(this.getClass());
 
 	RecordManager recordManager = null;
-	BTree tree = null;
+	BTree tree;
 
 	String dir = ".";
 	static String databaseName = "wordprobs";
@@ -96,16 +97,16 @@ public class JDBMWordsDataSource implements ICategorisedWordsDataSource {
 	}
 
 	public void open() throws IOException {
-		recordManager = new RecordManager(dir + "/" + databaseName);
-		ObjectCache cache = new ObjectCache(recordManager, new MRU(100));
+		recordManager = RecordManagerFactory.createRecordManager(dir + "/" + databaseName);
+		CacheRecordManager cacheRecordManager = new CacheRecordManager(recordManager, new MRU(100));
 
 		long recid = recordManager.getNamedObject(tableName);
 		if (recid != 0) {
 			// already exists
-			tree = BTree.load(recordManager, cache, recid);
+			tree = BTree.load(cacheRecordManager, recid);
 		} else {
 			// does not exist
-			tree = new BTree(recordManager, cache, new StringComparator());
+			tree = BTree.createInstance(cacheRecordManager, new StringComparator());
 			recordManager.setNamedObject(tableName, tree.getRecid());
 		}
 	}
