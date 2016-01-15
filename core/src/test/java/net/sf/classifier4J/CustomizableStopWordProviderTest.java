@@ -54,29 +54,15 @@ package net.sf.classifier4J;
 
 import java.io.IOException;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 
-public class CustomizableStopWordProviderTest extends TestCase {
-
-    /**
-     * Constructor for CustomizableStopWordProviderTest.
-     * @param arg0
-     */
-    public CustomizableStopWordProviderTest(String arg0) {
-        super(arg0);
-    }
-
-    /**
-     * Test for void CustomizableStopWordProvider(String)
-     */
-    public void testCustomizableStopWordProviderString() {
-        
-    }
-
-    /*
-     * Test for void CustomizableStopWordProvider()
-     */
+public class CustomizableStopWordProviderTest {
+    @Test
     public void testCustomizableStopWordProvider() {
         try {
             IStopWordProvider swp = new CustomizableStopWordProvider();
@@ -89,8 +75,4 @@ public class CustomizableStopWordProviderTest extends TestCase {
             fail(e.getLocalizedMessage());
         }
     }
-
-    public void testIsStopWord() {
-    }
-
 }
