@@ -74,7 +74,7 @@ public class UtilitiesTest {
         assertNotNull(result);
         assertEquals(2, result.size());
         assertNotNull(result.get("hello"));
-        assertEquals(new Integer(3), result.get("hello"));
+        assertEquals(3, result.get("hello"));
         //assertEquals(new Integer(1), result.get("there"));
         //assertEquals(new Integer(1), result.get("and"));
         assertEquals(2, result.get("again"));
