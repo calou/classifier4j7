@@ -70,7 +70,7 @@ public class SimpleSummariser implements ISummariser {
     }
 
 
-    protected Set getMostFrequentWords(int count, Map wordFrequencies) {
+    protected Set<String> getMostFrequentWords(int count, Map wordFrequencies) {
         return Utilities.getMostFrequentWords(count, wordFrequencies);
     }
 

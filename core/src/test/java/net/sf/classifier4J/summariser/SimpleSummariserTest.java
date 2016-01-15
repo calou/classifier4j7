@@ -56,7 +56,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -99,13 +98,13 @@ public class SimpleSummariserTest {
 
     @Test
     public void testGetMostFrequentWords() {
-        Map input = new HashMap();
+        Map<String, Integer> input = new HashMap<>();
         String[] values = { "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten" };
         for (int i = 0; i < values.length; i++) {
-            input.put(values[i], new Integer(i));
+            input.put(values[i], i);
         }
 
-        Set result = summariser.getMostFrequentWords(3, input);
+        Set<String> result = summariser.getMostFrequentWords(3, input);
         assertNotNull(result);
         assertEquals(3, result.size());
 
