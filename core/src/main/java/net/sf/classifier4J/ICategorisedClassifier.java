@@ -56,7 +56,7 @@ package net.sf.classifier4J;
  */
 public interface ICategorisedClassifier extends IClassifier {
 
-    public static final String DEFAULT_CATEGORY = "DEFAULT";
+    String DEFAULT_CATEGORY = "DEFAULT";
 
     /**
      *
@@ -70,7 +70,7 @@ public interface ICategorisedClassifier extends IClassifier {
          * @throws ClassifierException If a fatal problem occurs. For example,
          *                             the database is unavailable.
      */
-    public double classify(String category, String input) throws ClassifierException;
+    double classify(String category, String input) throws ClassifierException;
 
     /**
      * 
@@ -84,6 +84,6 @@ public interface ICategorisedClassifier extends IClassifier {
          * @throws ClassifierException If a fatal problem occurs. For example,
          *                             the database is unavailable.
      */
-    public boolean isMatch(String category, String input) throws ClassifierException;
+    boolean isMatch(String category, String input) throws ClassifierException;
 
 }

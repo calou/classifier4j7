@@ -58,5 +58,5 @@ public interface IStopWordProvider {
      * @param word The word to check
      * @return true if the word is a stop word, false otherwise
      */
-    public boolean isStopWord(String word);
+    boolean isStopWord(String word);
 }

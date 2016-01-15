@@ -51,9 +51,12 @@
 
 package net.sf.classifier4J.bayesian;
 
-import javax.naming.*;
-import javax.sql.*;
-import java.sql.*;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * @author Nick Lothian

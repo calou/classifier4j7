@@ -92,8 +92,7 @@ public abstract class AbstractClassifier implements IClassifier {
      * @see net.sf.classifier4J.IClassifier#isMatch(java.lang.String)
      */
     public boolean isMatch(String input) throws ClassifierException {
-        double matchProbability = classify(input);
-
+        final double matchProbability = classify(input);
         return isMatch(matchProbability);
     }
 

@@ -51,8 +51,6 @@
 
 package net.sf.classifier4J.bayesian;
 
-import java.io.IOException;
-
 import jdbm.RecordManager;
 import jdbm.RecordManagerFactory;
 import jdbm.btree.BTree;
@@ -60,6 +58,8 @@ import jdbm.helper.MRU;
 import jdbm.helper.StringComparator;
 import jdbm.recman.CacheRecordManager;
 import net.sf.classifier4J.ICategorisedClassifier;
+
+import java.io.IOException;
 
 public class JDBMWordsDataSource implements ICategorisedWordsDataSource {
 	private RecordManager recordManager = null;

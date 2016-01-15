@@ -82,17 +82,17 @@ public interface IClassifier {
      * Default value to use if the implementation cannot work out how
      * well a string matches.
      */
-    public static double NEUTRAL_PROBABILITY = 0.5d;
+    double NEUTRAL_PROBABILITY = 0.5d;
 
     /**
      * The minimum likelyhood that a string matches
      */
-    public static double LOWER_BOUND = 0.01d;
+    double LOWER_BOUND = 0.01d;
 
     /**
      * The maximum likelyhood that a string matches
      */
-    public static double UPPER_BOUND = 0.99d;
+    double UPPER_BOUND = 0.99d;
 
     /**
      * Default cutoff value used by defautl implmentation of 
@@ -102,7 +102,7 @@ public interface IClassifier {
      * The value is 0.9d
      * 
      */
-    public static double DEFAULT_CUTOFF = 0.9d;
+    double DEFAULT_CUTOFF = 0.9d;
 
     /**
      * 
@@ -110,7 +110,7 @@ public interface IClassifier {
      * 
      * @param cutoff the level below which isMatch will return false. Should be between 0 and 1.
      */
-    public void setMatchCutoff(double cutoff);
+    void setMatchCutoff(double cutoff);
 
     /**
      *
@@ -121,7 +121,7 @@ public interface IClassifier {
          *
          * @throws ClassifierException If a non-recoverable problem occurs
      */
-    public double classify(String input) throws ClassifierException;
+    double classify(String input) throws ClassifierException;
 
     /**
      * 
@@ -133,7 +133,7 @@ public interface IClassifier {
          *
          * @throws ClassifierException If a non-recoverable problem occurs
      */
-    public boolean isMatch(String input) throws ClassifierException;
+    boolean isMatch(String input) throws ClassifierException;
 
     /**
      * Convenience method which takes a match probability
@@ -143,5 +143,5 @@ public interface IClassifier {
      * @param matchProbability 
      * @return true if match, false otherwise
      */
-    public boolean isMatch(double matchProbability);
+    boolean isMatch(double matchProbability);
 }

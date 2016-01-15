@@ -75,12 +75,8 @@ public class SimpleHTMLTokenizer extends DefaultTokenizer {
         super();
     }
 
-    public SimpleHTMLTokenizer(int tokenizerConfig) {
+    public SimpleHTMLTokenizer(BreakMethod tokenizerConfig) {
         super(tokenizerConfig);
-    }
-
-    public SimpleHTMLTokenizer(String regularExpression) {
-        super(regularExpression);
     }
 
     /**

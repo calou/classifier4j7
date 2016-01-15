@@ -51,18 +51,12 @@
 
 package net.sf.classifier4J.bayesian;
 
+import net.sf.classifier4J.*;
+import net.sf.classifier4J.util.ToStringBuilder;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import net.sf.classifier4J.AbstractCategorizedTrainableClassifier;
-import net.sf.classifier4J.DefaultStopWordsProvider;
-import net.sf.classifier4J.DefaultTokenizer;
-import net.sf.classifier4J.ICategorisedClassifier;
-import net.sf.classifier4J.IClassifier;
-import net.sf.classifier4J.IStopWordProvider;
-import net.sf.classifier4J.ITokenizer;
-import net.sf.classifier4J.util.ToStringBuilder;
 
 /**
  *
@@ -104,7 +98,7 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
      * (set to BREAK_ON_WORD_BREAKS).
      */
     public BayesianClassifier() {
-        this(new SimpleWordsDataSource(), new DefaultTokenizer(DefaultTokenizer.BREAK_ON_WORD_BREAKS));
+        this(new SimpleWordsDataSource(), new DefaultTokenizer(BreakMethod.WORD));
     }
 
     /**
@@ -114,7 +108,7 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
      * @param wd a {@link net.sf.classifier4J.bayesian.IWordsDataSource}
      */
     public BayesianClassifier(IWordsDataSource wd) {
-        this(wd, new DefaultTokenizer(DefaultTokenizer.BREAK_ON_WORD_BREAKS));
+        this(wd, new DefaultTokenizer(BreakMethod.WORD));
     }
 
     /**
@@ -136,16 +130,6 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
      * @param swp a {@link net.sf.classifier4J.IStopWordProvider}
      */
     public BayesianClassifier(IWordsDataSource wd, ITokenizer tokenizer, IStopWordProvider swp) {
-        if (wd == null) {
-            throw new IllegalArgumentException("IWordsDataSource can't be null");
-        }
-        if (tokenizer == null) {
-            throw new IllegalArgumentException("ITokenizer can't be null");
-        }
-        if (swp == null) {
-            throw new IllegalArgumentException("IStopWordProvider can't be null");
-        }
-
         this.wordsData = wd;
         this.tokenizer = tokenizer;
         this.stopWordProvider = swp;

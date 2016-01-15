@@ -51,16 +51,9 @@
 
 package net.sf.classifier4J.summariser;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import net.sf.classifier4J.Utilities;
+
+import java.util.*;
 
 public class SimpleSummariser implements ISummariser {
 

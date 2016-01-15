@@ -52,8 +52,9 @@
 package net.sf.classifier4J.util;
 
 import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.net.URL;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 /**
  * <p>A class to locate resources, retrieve their contents, and determine their

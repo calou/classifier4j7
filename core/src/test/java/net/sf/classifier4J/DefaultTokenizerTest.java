@@ -55,46 +55,30 @@ package net.sf.classifier4J;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
 
 
 public class DefaultTokenizerTest {
 
-    @Test(expected = IllegalArgumentException.class)
-    public void constructor_withNullShouldThrowAnException() {
-        new DefaultTokenizer(null);
-    }
-
-    @Test
-    public void constructor_withEmptyString() {
-        new DefaultTokenizer("");
-    }
-
     @Test
     public void constructor_BREAK_ON_WHITESPACE() {
-        new DefaultTokenizer(DefaultTokenizer.BREAK_ON_WHITESPACE);
+        new DefaultTokenizer(BreakMethod.WHITESPACE);
     }
 
     @Test
     public void constructor_BREAK_ON_WORD_BREAKS() {
-        new DefaultTokenizer(DefaultTokenizer.BREAK_ON_WORD_BREAKS);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void constructor_withInvalidValue() {
-        new DefaultTokenizer(43);
+        new DefaultTokenizer(BreakMethod.WORD);
     }
 
     @Test
     public void tokenize_BREAK_ON_WHITESPACE() {
-        ITokenizer tok = new DefaultTokenizer(DefaultTokenizer.BREAK_ON_WHITESPACE);
+        ITokenizer tok = new DefaultTokenizer(BreakMethod.WHITESPACE);
         String[] words = tok.tokenize("My very,new string!");
         assertThat(words).containsExactly("My", "very,new", "string!");
     }
 
     @Test
     public void tokenize_BREAK_ON_WORD_BREAKS() {
-        ITokenizer tok = new DefaultTokenizer(DefaultTokenizer.BREAK_ON_WORD_BREAKS);
+        ITokenizer tok = new DefaultTokenizer(BreakMethod.WORD);
         String[] words = tok.tokenize("My very,new-string!and/more(NIO)peter's 1.4");
         assertThat(words).containsExactly("My", "very", "new", "string", "and", "more", "NIO", "peter", "s", "1", "4");
     }

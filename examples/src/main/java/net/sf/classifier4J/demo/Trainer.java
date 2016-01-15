@@ -54,7 +54,6 @@ import net.sf.classifier4J.*;
 import net.sf.classifier4J.bayesian.BayesianClassifier;
 import net.sf.classifier4J.bayesian.JDBMWordsDataSource;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;

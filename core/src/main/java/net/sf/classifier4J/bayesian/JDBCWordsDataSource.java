@@ -51,14 +51,9 @@
 
 package net.sf.classifier4J.bayesian;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import net.sf.classifier4J.ICategorisedClassifier;
+
+import java.sql.*;
 
 /**
  * 

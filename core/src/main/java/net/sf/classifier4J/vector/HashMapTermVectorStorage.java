@@ -4,11 +4,9 @@ package net.sf.classifier4J.vector;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class HashMapTermVectorStorage implements TermVectorStorage {
-    private Map storage = new HashMap();
-    
-    
+    private final Map<String, TermVector> storage = new HashMap();
+
     /**
      * @see net.sf.classifier4J.vector.TermVectorStorage#addTermVector(java.lang.String, net.sf.classifier4J.vector.TermVector)
      */
@@ -20,7 +18,7 @@ public class HashMapTermVectorStorage implements TermVectorStorage {
      * @see net.sf.classifier4J.vector.TermVectorStorage#getTermVector(java.lang.String)
      */
     public TermVector getTermVector(String category) {
-        return (TermVector) storage.get(category);
+        return storage.get(category);
     }
 
 }

@@ -14,15 +14,15 @@ public class TermVector implements Serializable {
     }
     
     public String[] getTerms() {
-        return (String[]) terms.clone();
+        return terms.clone();
     }
     
     public int[] getValues() {
-        return (int[]) values.clone();
+        return values.clone();
     }
     
     public String toString() {
-        StringBuffer results = new StringBuffer("{");
+        StringBuilder results = new StringBuilder("{");
 
         for (int i = 0; i < terms.length; i++) {
             results.append("[");

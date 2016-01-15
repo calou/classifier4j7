@@ -52,13 +52,7 @@
 
 package net.sf.classifier4J.bayesian;
 
-import net.sf.classifier4J.DefaultStopWordsProvider;
-import net.sf.classifier4J.DefaultTokenizer;
-import net.sf.classifier4J.ICategorisedClassifier;
-import net.sf.classifier4J.IClassifier;
-import net.sf.classifier4J.IStopWordProvider;
-import net.sf.classifier4J.ITokenizer;
-
+import net.sf.classifier4J.*;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -194,7 +188,7 @@ public class BayesianClassifierTest {
 	@Test
 	public void testGetTokenizer() throws Exception {
 		SimpleWordsDataSource wds = new SimpleWordsDataSource();
-		ITokenizer tokenizer = new DefaultTokenizer(DefaultTokenizer.BREAK_ON_WORD_BREAKS);		
+		ITokenizer tokenizer = new DefaultTokenizer(BreakMethod.WORD);
 		BayesianClassifier classifier = new BayesianClassifier(wds, tokenizer);
 		
 		assertEquals(tokenizer, classifier.getTokenizer());
@@ -203,7 +197,7 @@ public class BayesianClassifierTest {
 	@Test
 	public void testGetStopWordProvider() throws Exception {
 		SimpleWordsDataSource wds = new SimpleWordsDataSource();
-		ITokenizer tokenizer = new DefaultTokenizer(DefaultTokenizer.BREAK_ON_WORD_BREAKS);
+		ITokenizer tokenizer = new DefaultTokenizer(BreakMethod.WORD);
 		IStopWordProvider stopWordProvider =  new DefaultStopWordsProvider();		
 		BayesianClassifier classifier = new BayesianClassifier(wds, tokenizer, stopWordProvider);
 		

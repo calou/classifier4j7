@@ -51,13 +51,13 @@
 
 package net.sf.classifier4J;
 
+import net.sf.classifier4J.util.Resource;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import net.sf.classifier4J.util.*;
 
 public class CustomizableStopWordProvider implements IStopWordProvider {
 
@@ -73,7 +73,6 @@ public class CustomizableStopWordProvider implements IStopWordProvider {
      */
     public CustomizableStopWordProvider(String resourcename) throws IOException {
         resource = new Resource(resourcename);
-        
         init();
     }
 
@@ -82,16 +81,13 @@ public class CustomizableStopWordProvider implements IStopWordProvider {
     }
 
     protected void init() throws IOException {
-        ArrayList wordsLst = new ArrayList();
+        ArrayList<String> wordsLst = new ArrayList();
         BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
-        
         String word;
         while ((word = reader.readLine()) != null) {
             wordsLst.add(word.trim());
         }
-        
-        words = (String[]) wordsLst.toArray(new String[wordsLst.size()]);
-        
+        words = wordsLst.toArray(new String[wordsLst.size()]);
         Arrays.sort(words);
     }
 

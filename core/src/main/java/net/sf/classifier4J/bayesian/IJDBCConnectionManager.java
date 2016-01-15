@@ -60,7 +60,7 @@ import java.sql.SQLException;
  */
 public interface IJDBCConnectionManager {
 
-    public Connection getConnection() throws SQLException;
-    public void returnConnection(Connection con) throws SQLException;
+    Connection getConnection() throws SQLException;
+    void returnConnection(Connection con) throws SQLException;
 
 }

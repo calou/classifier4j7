@@ -62,6 +62,6 @@ public interface ITokenizer {
          * @return Should never return null, rather it should return an empty array of
          *         Strings if there aren't any elements to return.
      */
-    public String[] tokenize(String input);
+    String[] tokenize(String input);
 
 }

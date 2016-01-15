@@ -51,9 +51,9 @@
 
 package net.sf.classifier4J;
 
-import java.util.Arrays;
-
 import net.sf.classifier4J.util.ToStringBuilder;
+
+import java.util.Arrays;
 
 
 /**
@@ -62,7 +62,7 @@ import net.sf.classifier4J.util.ToStringBuilder;
  */
 public class DefaultStopWordsProvider implements IStopWordProvider {
     // This array is sorted in the constructor
-    private String[] stopWords = { "a", "and", "the", "me", "i", "of", "if", "it", "is", "they", "there", "but", "or", "to", "this", "you", "in", "your", "on", "for", "as", "are", "that", "with", "have", "be", "at", "or", "was", "so", "out", "not", "an" };
+    private String[] stopWords = {"a", "and", "the", "me", "i", "of", "if", "it", "is", "they", "there", "but", "or", "to", "this", "you", "in", "your", "on", "for", "as", "are", "that", "with", "have", "be", "at", "or", "was", "so", "out", "not", "an"};
     private String[] sortedStopWords = null;
 
     public DefaultStopWordsProvider() {
@@ -71,10 +71,10 @@ public class DefaultStopWordsProvider implements IStopWordProvider {
     }
 
     /**
-     * getter method which can be overridden to 
-     * supply the stop words. The array returned by this 
+     * getter method which can be overridden to
+     * supply the stop words. The array returned by this
      * method is sorted and then used internally
-     * 
+     *
      * @return the array of stop words
      */
     public String[] getStopWords() {
@@ -85,13 +85,7 @@ public class DefaultStopWordsProvider implements IStopWordProvider {
      * @see net.sf.classifier4J.IStopWordProvider#isStopWord(java.lang.String)
      */
     public boolean isStopWord(String word) {
-        if (word == null || "".equals(word)) {
-            return false;
-        } else {
-            // search the sorted array for the word, converted to lowercase
-            // if it is found, the index will be >= 0
-            return (Arrays.binarySearch(sortedStopWords, word.toLowerCase()) >= 0);
-        }
+        return word == null || "".equals(word) ? false : (Arrays.binarySearch(sortedStopWords, word.toLowerCase()) >= 0);
     }
 
     public String toString() {

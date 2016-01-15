@@ -66,7 +66,7 @@ public interface IWordsDataSource {
          * @throws WordsDataSourceException If there is a fatal problem. For 
          *         example, the database is unavailable
      */
-    public WordProbability getWordProbability(String word) throws WordsDataSourceException;
+    WordProbability getWordProbability(String word) throws WordsDataSourceException;
 
     /**
      * Add a matching word to the data source
@@ -76,7 +76,7 @@ public interface IWordsDataSource {
          * @throws WordsDataSourceException If there is a fatal problem. For 
          *         example, the database is unavailable
      */
-    public void addMatch(String word) throws WordsDataSourceException;
+    void addMatch(String word) throws WordsDataSourceException;
 
     /**
      * Add a non-matching word to the data source
@@ -86,5 +86,5 @@ public interface IWordsDataSource {
          * @throws WordsDataSourceException If there is a fatal problem. For 
          *         example, the database is unavailable
      */
-    public void addNonMatch(String word) throws WordsDataSourceException;
+    void addNonMatch(String word) throws WordsDataSourceException;
 }
