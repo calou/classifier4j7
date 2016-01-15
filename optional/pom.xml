@@ -5,32 +5,29 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>net.sf</groupId>
-        <artifactId>classifier4j-parent</artifactId>
+        <artifactId>classifier4j7-parent</artifactId>
         <version>0.7-SNAPSHOT</version>
     </parent>
-    <artifactId>classifier4j-optional</artifactId>
+    <artifactId>classifier4j7-optional</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>net.sf</groupId>
-            <artifactId>classifier4j-core</artifactId>
+            <artifactId>classifier4j7-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
-            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>jdbm</groupId>
             <artifactId>jdbm</artifactId>
-            <version>0.12</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
