@@ -52,8 +52,6 @@
 
 package net.sf.classifier4J.bayesian;
 
-import junit.framework.TestCase;
-import junit.textui.TestRunner;
 import net.sf.classifier4J.DefaultStopWordsProvider;
 import net.sf.classifier4J.DefaultTokenizer;
 import net.sf.classifier4J.ICategorisedClassifier;
@@ -61,25 +59,20 @@ import net.sf.classifier4J.IClassifier;
 import net.sf.classifier4J.IStopWordProvider;
 import net.sf.classifier4J.ITokenizer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.junit.Test;
 
 import java.util.Arrays;
+
+import static org.junit.Assert.*;
 
 /*
  * @author Nick Lothian
  * @author Peter Leschev
  */
-public class BayesianClassifierTest extends TestCase {
+public class BayesianClassifierTest {
 
-	private Log log = LogFactory.getLog(this.getClass());
-
-	public BayesianClassifierTest(String name) {
-		super(name);
-	}
-
+	@Test
 	public void testClassify() throws Exception {
-
 		SimpleWordsDataSource wds = new SimpleWordsDataSource();
 		BayesianClassifier classifier = new BayesianClassifier(wds);
 
@@ -97,6 +90,7 @@ public class BayesianClassifierTest extends TestCase {
 		assertEquals(0.96d, classifier.classify(ICategorisedClassifier.DEFAULT_CATEGORY, sentence), 0.009d);
 	}
 
+	@Test
 	public void testTeaching() throws Exception {
 		BayesianClassifier classifier = new BayesianClassifier();
 
@@ -189,6 +183,7 @@ public class BayesianClassifierTest extends TestCase {
 		assertTrue(classifier.isMatch(ICategorisedClassifier.DEFAULT_CATEGORY, sentence5));
 	}
 
+	@Test
 	public void testGetWordsDataSource() throws Exception {
 		SimpleWordsDataSource wds = new SimpleWordsDataSource();
 		BayesianClassifier classifier = new BayesianClassifier(wds);
@@ -196,6 +191,7 @@ public class BayesianClassifierTest extends TestCase {
 		assertEquals(wds, classifier.getWordsDataSource());
 	}
 
+	@Test
 	public void testGetTokenizer() throws Exception {
 		SimpleWordsDataSource wds = new SimpleWordsDataSource();
 		ITokenizer tokenizer = new DefaultTokenizer(DefaultTokenizer.BREAK_ON_WORD_BREAKS);		
@@ -204,6 +200,7 @@ public class BayesianClassifierTest extends TestCase {
 		assertEquals(tokenizer, classifier.getTokenizer());
 	}
 
+	@Test
 	public void testGetStopWordProvider() throws Exception {
 		SimpleWordsDataSource wds = new SimpleWordsDataSource();
 		ITokenizer tokenizer = new DefaultTokenizer(DefaultTokenizer.BREAK_ON_WORD_BREAKS);
@@ -213,6 +210,7 @@ public class BayesianClassifierTest extends TestCase {
 		assertEquals(stopWordProvider, classifier.getStopWordProvider());		
 	}
 
+	@Test
 	public void testCaseSensitive() throws Exception {
 		BayesianClassifier classifier = new BayesianClassifier();
 		assertFalse(classifier.isCaseSensitive()); // case insensitive by default;
@@ -220,26 +218,30 @@ public class BayesianClassifierTest extends TestCase {
 		assertTrue(classifier.isCaseSensitive());
 	}
 
-	public void testTransformWord() throws Exception {
+	@Test(expected = IllegalArgumentException.class)
+	public void transformWord_shouldThrowAnException() throws Exception {
+		BayesianClassifier classifier = new BayesianClassifier();
+		classifier.transformWord(null);
+	}
+
+	@Test
+	public void transformWord_caseInsensitive() throws Exception {
+		String word = "myWord";
 		BayesianClassifier classifier = new BayesianClassifier();
 		assertFalse(classifier.isCaseSensitive());
-		
-		String word = null;
-		try {		
-			classifier.transformWord(word);
-			fail("No exception thrown when null passed");
-		} catch (IllegalArgumentException e) {
-			// do nothing - this should be thrown
-		}
-		
-		word = "myWord";
 		assertEquals(word.toLowerCase(), classifier.transformWord(word));
-		
+	}
+
+	@Test
+	public void transformWord_caseSensitive() throws Exception {
+		String word = "myWord";
+		BayesianClassifier classifier = new BayesianClassifier();
 		classifier.setCaseSensitive(true);
 		assertNotSame(word.toLowerCase(), classifier.transformWord(word));
 		assertEquals(word, classifier.transformWord(word));		
 	}
 
+	@Test
 	public void testCalculateOverallProbability() throws Exception {
 		double prob = 0.3d;
 		WordProbability wp1 = new WordProbability("myWord1", prob);
@@ -255,12 +257,6 @@ public class BayesianClassifierTest extends TestCase {
 		double result = xy/(xy + z);
 		
 		BayesianClassifier classifier = new BayesianClassifier();
-		 		
 		assertEquals(result, classifier.calculateOverallProbability(Arrays.asList(wps)), errorMargin);
-	}
-
-
-	public static void main(String[] args) throws Exception {
-		TestRunner.run(BayesianClassifierTest.class);
 	}
 }
