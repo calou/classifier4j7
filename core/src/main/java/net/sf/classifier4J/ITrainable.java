@@ -58,7 +58,6 @@ package net.sf.classifier4J;
 public interface ITrainable {
     void teachMatch(String input) throws ClassifierException;
     void teachMatch(String category, String input) throws ClassifierException;
-
     void teachNonMatch(String input) throws ClassifierException;
     void teachNonMatch(String category, String input) throws ClassifierException;
 }

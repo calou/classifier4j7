@@ -164,7 +164,7 @@ public class WordProbability implements Comparable, Serializable {
         if (matchingCount == 0) {
             result = nonMatchingCount == 0 ? IClassifier.NEUTRAL_PROBABILITY : IClassifier.LOWER_BOUND;
         } else {
-            result = BayesianClassifier.normaliseSignificance((double) matchingCount / (double) (matchingCount + nonMatchingCount));
+            result = BayesianClassifier.normalizeSignificance((double) matchingCount / (double) (matchingCount + nonMatchingCount));
         }
         probability = result;
     }

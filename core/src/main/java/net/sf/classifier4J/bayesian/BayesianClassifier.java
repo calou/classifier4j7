@@ -59,31 +59,29 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- *
  * <p>A implementation of {@link net.sf.classifier4J.IClassifier} based on Bayes'
  * theorem (see http://www.wikipedia.org/wiki/Bayes_theorem).</p>
- *
+ * <p/>
  * <p>The basic usage pattern for this class is:
  * <ol>
- * 		<li>Create a instance of {@link net.sf.classifier4J.bayesian.IWordsDataSource}</li>
- * 		<li>Create a new instance of BayesianClassifier, passing the IWordsDataSource
- * 			to the constructor</li>
- * 		<li>Call {@link net.sf.classifier4J.IClassifier#classify(java.lang.String) }
- * 			or {@link net.sf.classifier4J.IClassifier#isMatch(java.lang.String) }
+ * <li>Create a instance of {@link net.sf.classifier4J.bayesian.IWordsDataSource}</li>
+ * <li>Create a new instance of BayesianClassifier, passing the IWordsDataSource
+ * to the constructor</li>
+ * <li>Call {@link net.sf.classifier4J.IClassifier#classify(java.lang.String) }
+ * or {@link net.sf.classifier4J.IClassifier#isMatch(java.lang.String) }
  * </ol>
  * </p>
- *
+ * <p/>
  * <p>For example:<br>
  * <tt>
- * 		IWordsDataSource wds = new SimpleWordsDataSource();<br>
- * 		IClassifier classifier = new BayesianClassifier(wds);<br>
- * 		System.out.println( "Matches = " + classifier.classify("This is a sentence") );
+ * IWordsDataSource wds = new SimpleWordsDataSource();<br>
+ * IClassifier classifier = new BayesianClassifier(wds);<br>
+ * System.out.println( "Matches = " + classifier.classify("This is a sentence") );
  * </tt>
  * </p>
  *
  * @author Nick Lothian
  * @author Peter Leschev
- *
  */
 public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
 
@@ -114,7 +112,7 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
     /**
      * Constructor for BayesianClassifier that specifies a datasource & tokenizer
      *
-     * @param wd a {@link net.sf.classifier4J.bayesian.IWordsDataSource}
+     * @param wd        a {@link net.sf.classifier4J.bayesian.IWordsDataSource}
      * @param tokenizer a {@link net.sf.classifier4J.ITokenizer}
      */
     public BayesianClassifier(IWordsDataSource wd, ITokenizer tokenizer) {
@@ -125,9 +123,9 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
      * Constructor for BayesianClassifier that specifies a datasource, tokenizer
      * and stop words provider
      *
-     * @param wd a {@link net.sf.classifier4J.bayesian.IWordsDataSource}
+     * @param wd        a {@link net.sf.classifier4J.bayesian.IWordsDataSource}
      * @param tokenizer a {@link net.sf.classifier4J.ITokenizer}
-     * @param swp a {@link net.sf.classifier4J.IStopWordProvider}
+     * @param swp       a {@link net.sf.classifier4J.IStopWordProvider}
      */
     public BayesianClassifier(IWordsDataSource wd, ITokenizer tokenizer, IStopWordProvider swp) {
         this.wordsData = wd;
@@ -146,38 +144,35 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
      * @see net.sf.classifier4J.ICategorisedClassifier#classify(java.lang.String, java.lang.String)
      */
     public double classify(String category, String input) throws WordsDataSourceException {
+        try {
+            return classify(category, tokenizer.tokenize(input));
+        } catch (NullPointerException e) {
+            return throwIllegalArgumentException(category);
+        }
+    }
+
+    private double throwIllegalArgumentException(String category) {
         if (category == null) {
             throw new IllegalArgumentException("category cannot be null");
-        }
-        if (input == null) {
+        } else {
             throw new IllegalArgumentException("input cannot be null");
         }
-
-        checkCategoriesSupported(category);
-
-        return classify(category, tokenizer.tokenize(input));
     }
 
     public void teachMatch(String category, String input) throws WordsDataSourceException {
-        if (category == null) {
-            throw new IllegalArgumentException("category cannot be null");
+        try {
+            teachMatch(category, tokenizer.tokenize(input));
+        } catch (NullPointerException e) {
+            throwIllegalArgumentException(category);
         }
-        if (input == null) {
-            throw new IllegalArgumentException("input cannot be null");
-        }
-        checkCategoriesSupported(category);
-        teachMatch(category, tokenizer.tokenize(input));
     }
 
     public void teachNonMatch(String category, String input) throws WordsDataSourceException {
-        if (category == null) {
-            throw new IllegalArgumentException("category cannot be null");
+        try {
+            teachNonMatch(category, tokenizer.tokenize(input));
+        } catch (NullPointerException e) {
+            throwIllegalArgumentException(category);
         }
-        if (input == null) {
-            throw new IllegalArgumentException("input cannot be null");
-        }
-        checkCategoriesSupported(category);
-        teachNonMatch(category, tokenizer.tokenize(input));
     }
 
     protected boolean isMatch(String category, String input[]) throws WordsDataSourceException {
@@ -194,15 +189,15 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
 
     protected double classify(String category, String words[]) throws WordsDataSourceException {
         List<WordProbability> wps = calcWordsProbability(category, words);
-        return normaliseSignificance(calculateOverallProbability(wps));
+        return normalizeSignificance(calculateOverallProbability(wps));
     }
 
     protected void teachMatch(String category, String words[]) throws WordsDataSourceException {
-        boolean categorise = isCategorise();
+        boolean categorized = isCategorized();
 
-        for (String word: words) {
+        for (String word : words) {
             if (isClassifiableWord(word)) {
-                if (categorise) {
+                if (categorized) {
                     ((ICategorisedWordsDataSource) wordsData).addMatch(category, transformWord(word));
                 } else {
                     wordsData.addMatch(transformWord(word));
@@ -212,11 +207,11 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
     }
 
     protected void teachNonMatch(String category, String words[]) throws WordsDataSourceException {
-        boolean categorise = isCategorise();
+        boolean categorized = isCategorized();
 
-        for (String word: words) {
+        for (String word : words) {
             if (isClassifiableWord(word)) {
-                if (categorise) {
+                if (categorized) {
                     ((ICategorisedWordsDataSource) wordsData).addNonMatch(category, transformWord(word));
                 } else {
                     wordsData.addNonMatch(transformWord(word));
@@ -226,7 +221,7 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
         }
     }
 
-    private boolean isCategorise() {
+    private boolean isCategorized() {
         return wordsData instanceof ICategorisedWordsDataSource;
     }
 
@@ -248,11 +243,11 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
     }
 
     /**
-     *
      * NOTE: Override this method with care. There is a good chance it will be removed
      * or have signature changes is later versions.
-     *
+     * <p/>
      * <br />
+     *
      * @todo need an option to only use the "X" most "important" words when calculating overall probability
      * "important" is defined as being most distant from NEUTAL_PROBABILITY
      */
@@ -280,7 +275,7 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
         if (category == null) {
             throw new IllegalArgumentException("category cannont be null");
         }
-        boolean categorise = isCategorise();
+        boolean categorise = isCategorized();
         checkCategoriesSupported(category);
         if (words == null) {
             return Collections.emptyList();
@@ -307,7 +302,7 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
         // if the category is not the default
         if (!ICategorisedClassifier.DEFAULT_CATEGORY.equals(category)) {
             // and the data source does not support categories
-            if (!isCategorise()) {
+            if (!isCategorized()) {
                 // throw an IllegalArgumentException
                 throw new IllegalArgumentException("Word Data Source does not support non-default categories.");
             }
@@ -325,7 +320,7 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
         return word != null && !"".equals(word) && !stopWordProvider.isStopWord(word);
     }
 
-    protected static double normaliseSignificance(double sig) {
+    protected static double normalizeSignificance(double sig) {
         if (Double.compare(IClassifier.UPPER_BOUND, sig) < 0) {
             return IClassifier.UPPER_BOUND;
         } else if (Double.compare(IClassifier.LOWER_BOUND, sig) > 0) {
@@ -334,6 +329,7 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
             return sig;
         }
     }
+
     /**
      * @return true if the classifier is case sensitive, false otherwise
      * (false by default)
