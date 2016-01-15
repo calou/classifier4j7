@@ -52,69 +52,60 @@
 
 package net.sf.classifier4J;
 
-import junit.framework.TestCase;
 
+import org.junit.Before;
+import org.junit.Test;
 
-public class SimpleClassifierTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-	private SimpleClassifier classifier = null;
+public class SimpleClassifierTest {
 
-	/**
-	 * Constructor for SimpleClassifierTest.
-	 * @param arg0
-	 */
-	public SimpleClassifierTest(String arg0) {
-		super(arg0);
+    private SimpleClassifier classifier;
+
+    @Before
+    public void setUp() throws Exception {
+        classifier = new SimpleClassifier();
 	}
 
-	/**
-	 * @see junit.framework.TestCase#setUp()
-	 */
-	protected void setUp() throws Exception {		
-		classifier = new SimpleClassifier();
-	}
-
-	/**
-	 * @see junit.framework.TestCase#tearDown()
-	 */
-	protected void tearDown() throws Exception {
-		classifier = null;
-	}
-
-
-	public void testGetSearchWord() {
+    @Test
+    public void testGetSearchWord() {
 		String word = "java";
 		classifier.setSearchWord( word );
 		assertEquals( word, classifier.getSearchWord() );
 	}
 
-	public void testSetSearchWord() {
+    @Test
+    public void testSetSearchWord() {
 		String word = "java";
 		classifier.setSearchWord( word );
 		assertEquals( word, classifier.getSearchWord() );		
 	}
 
-	public void testClassify() {
+    @Test
+    public void testClassify() {
 		String word = "java";
 		classifier.setSearchWord( word );
 
-		String sentance = "This is a sentance about java";				
-		assertEquals( 1d, classifier.classify(sentance), 0d);	
-		
-		sentance = "This is not";				
-		assertEquals( 0d, classifier.classify(sentance), 0d);			
-	}
+        String sentence = "This is a sentence about java";
+        assertEquals(1d, classifier.classify(sentence), 0d);
 
-	public void testMatch() throws Exception {
+        sentence = "This is not";
+        assertEquals(0d, classifier.classify(sentence), 0d);
+    }
+
+    @Test
+    public void testMatch() throws Exception {
 		String word = "java";
 		classifier.setSearchWord( word );
+        String sentence = "This is a sentence about java";
+        assertTrue(classifier.isMatch(sentence));
 
-		String sentance = "This is a sentance about java";				
-		assertTrue( classifier.isMatch(sentance) );
-		
-	}
-	
-	public void testIsMatchDouble() throws Exception {
+    }
+
+    @Test
+    public void testIsMatchDouble() throws Exception {
 		assertTrue(classifier.isMatch(IClassifier.DEFAULT_CUTOFF));		
 		assertTrue(classifier.isMatch(IClassifier.DEFAULT_CUTOFF + 0.01d));
 		assertFalse(classifier.isMatch(IClassifier.DEFAULT_CUTOFF - 0.01d));
