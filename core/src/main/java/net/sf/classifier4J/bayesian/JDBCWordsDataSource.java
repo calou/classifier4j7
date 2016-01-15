@@ -58,9 +58,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import net.sf.classifier4J.ICategorisedClassifier;
 
 /**
@@ -87,8 +84,6 @@ import net.sf.classifier4J.ICategorisedClassifier;
 public class JDBCWordsDataSource implements ICategorisedWordsDataSource {
 
     IJDBCConnectionManager connectionManager;
-
-    private Log log = LogFactory.getLog(this.getClass());
 
     /**
      * Create a JDBCWordsDataSource using the DEFAULT_CATEGORY ("DEFAULT")
@@ -133,13 +128,7 @@ public class JDBCWordsDataSource implements ICategorisedWordsDataSource {
                 }
             }
         }
-
-        if (log.isDebugEnabled()) {
-            log.debug(method + " WordProbability loaded [" + wp + "]");
-        }
-
         return wp;
-
     }
 
     public WordProbability getWordProbability(String word) throws WordsDataSourceException {

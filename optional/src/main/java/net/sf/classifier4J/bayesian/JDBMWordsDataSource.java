@@ -61,14 +61,9 @@ import jdbm.helper.StringComparator;
 import jdbm.recman.CacheRecordManager;
 import net.sf.classifier4J.ICategorisedClassifier;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 public class JDBMWordsDataSource implements ICategorisedWordsDataSource {
-	Log log = LogFactory.getLog(this.getClass());
-
-	RecordManager recordManager = null;
-	BTree tree;
+	private RecordManager recordManager = null;
+	private BTree tree;
 
 	String dir = ".";
 	static String databaseName = "wordprobs";
@@ -138,7 +133,6 @@ public class JDBMWordsDataSource implements ICategorisedWordsDataSource {
 			}
 			tree.insert(getKey(category, word), wp, true);
 		} catch (IOException e) {
-			log.error("Error with JDBM datasource", e);
 			throw new RuntimeException("Error with JDBM datasource");
 		}
 
@@ -157,7 +151,6 @@ public class JDBMWordsDataSource implements ICategorisedWordsDataSource {
 			}
 			tree.insert(getKey(category, word), wp, true);
 		} catch (IOException e) {
-			log.error("Error with JDBM datasource", e);
 			throw new RuntimeException("Error with JDBM datasource");
 		}
 	}
@@ -176,7 +169,6 @@ public class JDBMWordsDataSource implements ICategorisedWordsDataSource {
 		try {
 			return (WordProbability) tree.find(getKey(category,word));
 		} catch (IOException e) {
-			log.error("Error in JDBM datasource", e);
 			throw new RuntimeException("Error in JDBM datasource");
 		}
 	}
