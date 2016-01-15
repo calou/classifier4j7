@@ -101,11 +101,9 @@ public class Utilities {
 
         Map<String, Integer> result = new HashMap<>();
         for (String w : uniqueWords) {
-            if (stopWordsProvider == null) {
-                // no stop word provider, so add all words
-                result.put(w, countWords(w, words));
-            } else if (isWord(w) && !stopWordsProvider.isStopWord(w)) {
-                // add only words that are not stop words			
+            // no stop word provider, so add all words
+            // add only words that are not stop words
+            if (stopWordsProvider == null || (isWord(w) && !stopWordsProvider.isStopWord(w))) {
                 result.put(w, countWords(w, words));
             }
         }
@@ -177,10 +175,8 @@ public class Utilities {
         int itemIndex = Arrays.binarySearch(words, word);
 
         // iterate backwards until we find the first match
-        if (itemIndex > 0) {
-            while (itemIndex > 0 && words[itemIndex].equals(word)) {
-                itemIndex--;
-            }
+        while (itemIndex > 0 && words[itemIndex].equals(word)) {
+            itemIndex--;
         }
 
         // now itemIndex is one item before the start of the words
@@ -189,15 +185,11 @@ public class Utilities {
             if (words[itemIndex].equals(word)) {
                 count++;
             }
-
             itemIndex++;
-            if (itemIndex < words.length) {
-                if (!words[itemIndex].equals(word)) {
-                    break;
-                }
+            if (itemIndex < words.length && !words[itemIndex].equals(word)) {
+                break;
             }
         }
-
         return count;
     }
 
