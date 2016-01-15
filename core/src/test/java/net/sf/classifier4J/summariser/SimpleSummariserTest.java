@@ -57,29 +57,23 @@ import java.util.Map;
 import java.util.Set;
 
 import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
-public class SimpleSummariserTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-    SimpleSummariser summariser = null;
+public class SimpleSummariserTest {
 
-    /*
-     * @see TestCase#setUp()
-     */
-    protected void setUp() throws Exception {
+    private SimpleSummariser summariser = null;
+
+    @Before
+    public void setUp() throws Exception {
         summariser = new SimpleSummariser();
-        super.setUp();
     }
 
-    /*
-     * @see TestCase#tearDown()
-     */
-    protected void tearDown() throws Exception {
-        summariser = null;
-        super.tearDown();
-    }
-
+    @Test
     public void testSummarise() {
-
         String input = "Classifier4J is a java package for working with text. Classifier4J includes a summariser.";
         String expectedResult = "Classifier4J is a java package for working with text.";
 
@@ -103,6 +97,7 @@ public class SimpleSummariserTest extends TestCase {
 
     }
 
+    @Test
     public void testGetMostFrequentWords() {
         Map input = new HashMap();
         String[] values = { "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten" };
@@ -133,7 +128,5 @@ public class SimpleSummariserTest extends TestCase {
             assertEquals(values[values.length - count], resultValue);
             count++;
         }
-
     }
-
 }
