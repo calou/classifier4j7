@@ -50,136 +50,114 @@
  */
 package net.sf.classifier4J;
 
-import java.io.ByteArrayInputStream;
+import org.junit.Test;
 
-import java.util.Arrays;
+import java.io.ByteArrayInputStream;
 import java.util.Map;
 
-import junit.framework.TestCase;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * @author Nick Lothian
  * @author Peter Leschev
  */
-public class UtilitiesTest extends TestCase {
+public class UtilitiesTest {
 
-	private String sentence = "Hello there hello again and hello again.";
+    private String sentence = "Hello there hello again and hello again.";
 
-	public void testGetWordFrequency() {
-		// standard test
-		Map result = Utilities.getWordFrequency(sentence);
-		assertNotNull(result);
-		assertEquals(2, result.size());
-		assertNotNull(result.get("hello"));
-		assertEquals(new Integer(3),  result.get("hello"));
-		//assertEquals(new Integer(1), result.get("there"));
-		//assertEquals(new Integer(1), result.get("and"));
-		assertEquals(new Integer(2),  result.get("again"));
+    @Test
+    public void testGetWordFrequency() {
+        // standard test
+        Map result = Utilities.getWordFrequency(sentence);
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertNotNull(result.get("hello"));
+        assertEquals(new Integer(3), result.get("hello"));
+        //assertEquals(new Integer(1), result.get("there"));
+        //assertEquals(new Integer(1), result.get("and"));
+        assertEquals(2, result.get("again"));
 
-		// test case sensitivity
-		result = Utilities.getWordFrequency(sentence, true);
-		assertNotNull(result);
-		assertEquals(3, result.size());
-		assertNotNull(result.get("hello"));
-		assertEquals(new Integer(2),  result.get("hello"));
-		assertEquals(new Integer(1),  result.get("Hello"));
-		//assertEquals(new Integer(1), result.get("there"));
-		//assertEquals(new Integer(1), result.get("and"));
-		assertEquals(new Integer(2),  result.get("again"));
+        // test case sensitivity
+        result = Utilities.getWordFrequency(sentence, true);
+        assertNotNull(result);
+        assertEquals(3, result.size());
+        assertNotNull(result.get("hello"));
+        assertEquals(2, result.get("hello"));
+        assertEquals(1, result.get("Hello"));
+        //assertEquals(new Integer(1), result.get("there"));
+        //assertEquals(new Integer(1), result.get("and"));
+        assertEquals(2, result.get("again"));
 
-		// test without a stop word provider
-		result = Utilities.getWordFrequency(sentence, false, new DefaultTokenizer(), null);
-		assertNotNull(result);
-		assertEquals(4, result.size());
-		assertNotNull(result.get("hello"));
-		assertEquals(new Integer(3),  result.get("hello"));
-		assertEquals(new Integer(1),  result.get("there"));
-		assertEquals(new Integer(1),  result.get("and"));
-		assertEquals(new Integer(2),  result.get("again"));
-
-	}
-
-	public void testGetUniqueWords() {
-		String[] result = Utilities.getUniqueWords(null);
-		assertNotNull(result);
-		assertEquals(0, result.length);
-
-		String[] input = { "one", "one", "one", "two", "three" };
-		String[] expectedResult = { "one", "three", "two" };
-
-		result = Utilities.getUniqueWords(input);
-
-		assertNotNull(result);
-		assertEquals(expectedResult.length, result.length);
-
-		Arrays.sort(expectedResult);
-		Arrays.sort(result);
-
-		for (int i = 0; i < expectedResult.length; i++) {
-			assertEquals(expectedResult[i], result[i]);
-		}
-
-		String[] words = new DefaultTokenizer().tokenize(sentence.toLowerCase());
-		result = Utilities.getUniqueWords(words);
-		assertEquals(4, result.length);
-	}
-
-	public void testCountWords() {
-		String[] words = { "word", "word", "word", "notword", "z", "a" };
-		Arrays.sort(words);
-		assertEquals(3, Utilities.countWords("word", words));
-
-		String[] words2 = { "word", "word", "word" };
-		Arrays.sort(words2);
-		assertEquals(3, Utilities.countWords("word", words2));
-
-		String[] words3 = {
-		};
-		Arrays.sort(words3);
-		assertEquals(0, Utilities.countWords("word", words3));
-
-		String[] words4 = { "notword", "z", "a" };
-		Arrays.sort(words4);
-		assertEquals(0, Utilities.countWords("word", words4));
-	}
-
-	public void testGetSentences() {
-
-		String[] result = Utilities.getSentences(null);
-		assertNotNull(result);
-		assertEquals(0, result.length);
-
-		String sentence1 = "This is sentence one";
-		String sentence2 = "This is sentence two";
-		String someSentences = sentence1 + "... " + sentence2 + "..";
-		result = Utilities.getSentences(someSentences);
-		assertNotNull(result);
-		assertEquals(2, result.length);
-		assertEquals(sentence1, result[0].trim());
-		assertEquals(sentence2, result[1].trim());
-
-		someSentences = sentence1 + "! " + sentence2 + ".";
-		result = Utilities.getSentences(someSentences);
-		assertNotNull(result);
-		assertEquals(2, result.length);
-		assertEquals(sentence1, result[0].trim());
-		assertEquals(sentence2, result[1].trim());
-
-		someSentences = sentence1 + "? " + sentence2 + ".";
-		result = Utilities.getSentences(someSentences);
-		assertNotNull(result);
-		assertEquals(2, result.length);
-		assertEquals(sentence1, result[0].trim());
-		assertEquals(sentence2, result[1].trim());
-	}
-
-    public void testGetString() throws Exception {       
-        assertEquals(sentence, Utilities.getString(
-                                   new ByteArrayInputStream(
-                                       sentence.getBytes())));
+        // test without a stop word provider
+        result = Utilities.getWordFrequency(sentence, false, new DefaultTokenizer(), null);
+        assertNotNull(result);
+        assertEquals(4, result.size());
+        assertNotNull(result.get("hello"));
+        assertEquals(3, result.get("hello"));
+        assertEquals(1, result.get("there"));
+        assertEquals(1, result.get("and"));
+        assertEquals(2, result.get("again"));
     }
-    
-    public static void main(String[] args) throws Exception {
-        junit.textui.TestRunner.run(UtilitiesTest.class);
-    }        
+
+    @Test
+    public void testGetUniqueWords() {
+        String[] result = Utilities.getUniqueWords(null);
+        assertNotNull(result);
+        assertEquals(0, result.length);
+
+        String[] input = {"one", "one", "one", "two", "three"};
+        result = Utilities.getUniqueWords(input);
+        assertThat(result).containsExactly("one", "three", "two");
+
+        String[] words = new DefaultTokenizer().tokenize(sentence.toLowerCase());
+        result = Utilities.getUniqueWords(words);
+        assertEquals(4, result.length);
+    }
+
+    @Test
+    public void testCountWords() {
+        assertEquals(3, Utilities.countWords("word", new String[]{"word", "word", "word", "notword", "z", "a"}));
+        assertEquals(3, Utilities.countWords("word", new String[]{"word", "word", "word"}));
+        assertEquals(0, Utilities.countWords("word", new String[]{}));
+        assertEquals(0, Utilities.countWords("word", new String[]{"notword", "z", "a"}));
+    }
+
+    @Test
+    public void testGetSentences() {
+        String[] result = Utilities.getSentences(null);
+        assertNotNull(result);
+        assertEquals(0, result.length);
+
+        String sentence1 = "This is sentence one";
+        String sentence2 = "This is sentence two";
+        String someSentences = sentence1 + "... " + sentence2 + "..";
+        result = Utilities.getSentences(someSentences);
+        assertNotNull(result);
+        assertEquals(2, result.length);
+        assertEquals(sentence1, result[0].trim());
+        assertEquals(sentence2, result[1].trim());
+
+        someSentences = sentence1 + "! " + sentence2 + ".";
+        result = Utilities.getSentences(someSentences);
+        assertNotNull(result);
+        assertEquals(2, result.length);
+        assertEquals(sentence1, result[0].trim());
+        assertEquals(sentence2, result[1].trim());
+
+        someSentences = sentence1 + "? " + sentence2 + ".";
+        result = Utilities.getSentences(someSentences);
+        assertNotNull(result);
+        assertEquals(2, result.length);
+        assertEquals(sentence1, result[0].trim());
+        assertEquals(sentence2, result[1].trim());
+    }
+
+    @Test
+    public void testGetString() throws Exception {
+        assertEquals(sentence, Utilities.getString(
+                new ByteArrayInputStream(
+                        sentence.getBytes())));
+    }
 }
