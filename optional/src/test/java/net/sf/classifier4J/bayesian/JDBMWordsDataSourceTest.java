@@ -50,79 +50,128 @@
  */
 package net.sf.classifier4J.bayesian;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import java.io.File;
 
-public class JDBMWordsDataSourceTest extends AbstractWordsDataSourceSupport {
-	
-	/**
-	 * @param arg0
-	 */
-	public JDBMWordsDataSourceTest(String arg0) {
-		super(arg0);		
-	}
+import static org.junit.Assert.*;
 
-	//JDBMWordsDataSource wordsDataSource = null;
+public class JDBMWordsDataSourceTest {
 
-	/*
-	 * @see TestCase#setUp()
-	 */
-	protected void setUp() throws Exception {
-		wordsDataSource = new JDBMWordsDataSource();
-		((JDBMWordsDataSource)wordsDataSource).open();
-		super.setUp();
-	}
+    private IWordsDataSource wordsDataSource;
 
-	/*
-	 * @see TestCase#tearDown()
-	 */
-	protected void tearDown() throws Exception {
-		((JDBMWordsDataSource)wordsDataSource).close();
-		wordsDataSource = null;
-		
-		File dbFile = new File(JDBMWordsDataSource.databaseName + ".db");		
-		if (dbFile.exists()) {			
-			dbFile.delete();
-			//System.out.println( "deleting " + dbFile.getAbsolutePath() );
-		}
-		dbFile = null;
+    @Before
+    public void setUp() throws Exception {
+        wordsDataSource = new JDBMWordsDataSource();
+        ((JDBMWordsDataSource) wordsDataSource).open();
+    }
 
-		File indexFile = new File(JDBMWordsDataSource.databaseName + ".lg");
-		if (indexFile.exists()) {			
-			indexFile.delete();
-			//System.out.println( "deleting " + indexFile.getAbsolutePath() );
-		}	
-		indexFile.delete();		
-		
-		super.tearDown();
-	}
-	
-	/*
-	public void testMultipleWrites2() {
-		long startTime = System.currentTimeMillis();	
-		
-		String word = "myWord";
-		int count = 500000;
-		for (int i=0; i < count; i++) {
-			wordsDataSource.addNonMatch(word + count);
-		}				
-		long endTime = System.currentTimeMillis();
-		
-		System.out.println(count + " writes took " + (endTime-startTime)/1000 + " seconds");
-	}
-	*/
-	
-	public void testMultipleCategories() throws Exception {
-		String word = "myWord";
-		String category = "category1";
-		((ICategorisedWordsDataSource)wordsDataSource).addNonMatch(category, word);
-		((ICategorisedWordsDataSource)wordsDataSource).addMatch(category, word);
-		((ICategorisedWordsDataSource)wordsDataSource).addMatch(category, word);		
-		assertNull(wordsDataSource.getWordProbability(word)); // should be null in the default category
-		
-		WordProbability wp = ((ICategorisedWordsDataSource)wordsDataSource).getWordProbability(category, word);
-		assertNotNull(wp); // should not be null for the correct category
-		assertEquals(1, wp.getNonMatchingCount());
-		assertEquals(2, wp.getMatchingCount());
-	}
+    @After
+    public void tearDown() throws Exception {
+        ((JDBMWordsDataSource) wordsDataSource).close();
+        wordsDataSource = null;
 
+        File dbFile = new File(JDBMWordsDataSource.databaseName + ".db");
+        if (dbFile.exists()) {
+            dbFile.delete();
+        }
+
+        File indexFile = new File(JDBMWordsDataSource.databaseName + ".lg");
+        if (indexFile.exists()) {
+            indexFile.delete();
+        }
+        indexFile.delete();
+    }
+
+    @Test
+    public void testEmptySource() throws Exception {
+        WordProbability wp = wordsDataSource.getWordProbability("myWord");
+        assertNull(wp);
+    }
+
+    @Test
+    public void testAddMatch() throws Exception {
+        wordsDataSource.addMatch("myWord");
+        WordProbability wp = wordsDataSource.getWordProbability("myWord");
+        assertNotNull(wp);
+        assertEquals(1, wp.getMatchingCount());
+        assertEquals(0, wp.getNonMatchingCount());
+
+        wordsDataSource.addMatch("myWord");
+
+        wp = wordsDataSource.getWordProbability("myWord");
+        assertNotNull(wp);
+        assertEquals(2, wp.getMatchingCount());
+        assertEquals(0, wp.getNonMatchingCount());
+    }
+
+    @Test
+    public void testAddNonMatch() throws Exception {
+        wordsDataSource.addNonMatch("myWord");
+        WordProbability wp = wordsDataSource.getWordProbability("myWord");
+        assertNotNull(wp);
+        assertEquals(0, wp.getMatchingCount());
+        assertEquals(1, wp.getNonMatchingCount());
+
+        wordsDataSource.addNonMatch("myWord");
+
+        wp = wordsDataSource.getWordProbability("myWord");
+        assertNotNull(wp);
+        assertEquals(0, wp.getMatchingCount());
+        assertEquals(2, wp.getNonMatchingCount());
+    }
+
+    @Test
+    public void testAddMultipleMatches() throws Exception {
+        String word = "myWord";
+        int count = 10;
+        for (int i = 0; i < count; i++) {
+            wordsDataSource.addMatch(word);
+        }
+        WordProbability wp = wordsDataSource.getWordProbability(word);
+        assertNotNull(wp);
+        assertEquals(count, wp.getMatchingCount());
+    }
+
+    @Test
+    public void testAddMultipleNonMatches() throws Exception {
+        String word = "myWord";
+        int count = 10;
+        for (int i = 0; i < count; i++) {
+            wordsDataSource.addNonMatch(word);
+        }
+        WordProbability wp = wordsDataSource.getWordProbability(word);
+        assertNotNull(wp);
+        assertEquals(count, wp.getNonMatchingCount());
+    }
+
+    @Test
+    public void testMultipleCategories() throws Exception {
+        String word = "myWord";
+        String category = "category1";
+        ((ICategorisedWordsDataSource) wordsDataSource).addNonMatch(category, word);
+        ((ICategorisedWordsDataSource) wordsDataSource).addMatch(category, word);
+        ((ICategorisedWordsDataSource) wordsDataSource).addMatch(category, word);
+        assertNull(wordsDataSource.getWordProbability(word)); // should be null in the default category
+
+        WordProbability wp = ((ICategorisedWordsDataSource) wordsDataSource).getWordProbability(category, word);
+        assertNotNull(wp); // should not be null for the correct category
+        assertEquals(1, wp.getNonMatchingCount());
+        assertEquals(2, wp.getMatchingCount());
+    }
+
+    @Test
+    public void benchmark() throws Exception {
+        long startTime = System.currentTimeMillis();
+
+        String word = "myWord";
+        int count = 500;
+        for (int i = 0; i < count; i++) {
+            wordsDataSource.addNonMatch(word + count);
+        }
+        long duration = System.currentTimeMillis() - startTime;
+        System.out.println("Duration : " + duration + " ms");
+    }
 }
