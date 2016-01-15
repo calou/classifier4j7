@@ -52,81 +52,50 @@
 
 package net.sf.classifier4J;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.junit.Test;
 
-import junit.framework.TestCase;
-import junit.textui.TestRunner;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
-public class DefaultTokenizerTest extends TestCase {
-  
-  private Log log = LogFactory.getLog(this.getClass());
-  
-  public DefaultTokenizerTest(String name) {
-    super(name);
-  }
-  
-  public void testConstructors() {
-    ITokenizer tok = null;
-    
-    try {
-      tok = new DefaultTokenizer(null);
-      fail("Shouldn't be able to set a tokenizer of null");
+
+public class DefaultTokenizerTest {
+
+    @Test(expected = IllegalArgumentException.class)
+    public void constructor_withNullShouldThrowAnException() {
+        new DefaultTokenizer(null);
     }
-    catch(IllegalArgumentException e) {
-      assertTrue(true);
+
+    @Test
+    public void constructor_withEmptyString() {
+        new DefaultTokenizer("");
     }
-    
-    tok = new DefaultTokenizer("");
-    
-    tok = new DefaultTokenizer(DefaultTokenizer.BREAK_ON_WHITESPACE);
-    
-    tok = new DefaultTokenizer(DefaultTokenizer.BREAK_ON_WORD_BREAKS);
-    
-    try {
-      tok = new DefaultTokenizer(43);
-      fail("Shouldn't be able to set a tokenizer of type 43");
+
+    @Test
+    public void constructor_BREAK_ON_WHITESPACE() {
+        new DefaultTokenizer(DefaultTokenizer.BREAK_ON_WHITESPACE);
     }
-    catch(IllegalArgumentException e) {
-      assertTrue(true);
+
+    @Test
+    public void constructor_BREAK_ON_WORD_BREAKS() {
+        new DefaultTokenizer(DefaultTokenizer.BREAK_ON_WORD_BREAKS);
     }
-  }
-  
-  public void testTokenize() {
-    
-    ITokenizer tok = null;
-    String words[] = null;
-    
-    tok = new DefaultTokenizer(DefaultTokenizer.BREAK_ON_WHITESPACE);
-    words = tok.tokenize("My very,new string!");
-    
-    assertEquals(3, words.length);
-    assertEquals("My",       words[0]);
-    assertEquals("very,new", words[1]);
-    assertEquals("string!",  words[2]);
-    
-    tok = new DefaultTokenizer(DefaultTokenizer.BREAK_ON_WORD_BREAKS);
-    words = tok.tokenize("My very,new-string!and/more(NIO)peter's 1.4");
-    
-    assertEquals(11, words.length);
-    assertEquals("My",       words[0]);
-    assertEquals("very",     words[1]);
-    assertEquals("new",      words[2]);
-    assertEquals("string",   words[3]);
-    assertEquals("and",      words[4]);
-    assertEquals("more",     words[5]);
-    assertEquals("NIO",      words[6]);
-    
-    //todo: Shouldn't this be "peter's", instead of "peter" & "s"?
-    assertEquals("peter",    words[7]);
-    assertEquals("s",        words[8]);  
-    
-    //todo: Shouldn't this be "1.4", instead of "1" & "4"?
-    assertEquals("1",        words[9]); 
-    assertEquals("4",        words[10]); 
-  }
-  
-  public static void main(String[] args) throws Exception {
-    TestRunner.run(DefaultTokenizerTest.class);
-  }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void constructor_withInvalidValue() {
+        new DefaultTokenizer(43);
+    }
+
+    @Test
+    public void tokenize_BREAK_ON_WHITESPACE() {
+        ITokenizer tok = new DefaultTokenizer(DefaultTokenizer.BREAK_ON_WHITESPACE);
+        String[] words = tok.tokenize("My very,new string!");
+        assertThat(words).containsExactly("My", "very,new", "string!");
+    }
+
+    @Test
+    public void tokenize_BREAK_ON_WORD_BREAKS() {
+        ITokenizer tok = new DefaultTokenizer(DefaultTokenizer.BREAK_ON_WORD_BREAKS);
+        String[] words = tok.tokenize("My very,new-string!and/more(NIO)peter's 1.4");
+        assertThat(words).containsExactly("My", "very", "new", "string", "and", "more", "NIO", "peter", "s", "1", "4");
+    }
 }
