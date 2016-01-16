@@ -1,4 +1,5 @@
-import net.sf.classifier4J.ICategorisedClassifier;
+package net.sf.classifier4J.example.bayesian.gender;
+
 import net.sf.classifier4J.bayesian.WordsDataSourceException;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -7,6 +8,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,9 +25,9 @@ public class GenderBayesianClassifierTest {
     @BeforeClass
     public static void setupClass() throws GenderException {
         GENDER_CLASSIFIER = new GenderBayesianClassifier();
-        List<String> maleSamples = getLinesFromFile("male.txt");
-        List<String> femaleSamples = getLinesFromFile("female.txt");
-        List<String> nonMatchingSamples = getLinesFromFile("non-matchings.txt");
+        List<String> maleSamples = getLinesFromFile("gender/male.txt");
+        List<String> femaleSamples = getLinesFromFile("gender/female.txt");
+        List<String> nonMatchingSamples = getLinesFromFile("gender/non-matchings.txt");
 
         long start = System.currentTimeMillis();
         GENDER_CLASSIFIER.train(maleSamples, femaleSamples, nonMatchingSamples);
@@ -30,17 +36,21 @@ public class GenderBayesianClassifierTest {
     }
 
     private static List<String> getLinesFromFile(String filename) throws GenderException {
-        List<String> femaleSamples = new ArrayList<>();
-        try (InputStream is = GenderBayesianClassifierTest.class.getResourceAsStream(filename);
-             BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                femaleSamples.add(line);
+        List<String> samples = new ArrayList<>();
+        try{
+            Path path = Paths.get(GenderBayesianClassifierTest.class.getClassLoader().getResource(filename).toURI());
+            try (BufferedReader br = Files.newBufferedReader(path, Charset.defaultCharset())) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    samples.add(line);
+                }
+            } catch (IOException e) {
+                throw new GenderException(e);
             }
-        } catch (IOException e) {
+        }catch (URISyntaxException e){
             throw new GenderException(e);
         }
-        return femaleSamples;
+        return samples;
     }
 
     @Test

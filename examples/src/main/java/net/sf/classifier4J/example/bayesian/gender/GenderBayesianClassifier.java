@@ -1,3 +1,5 @@
+package net.sf.classifier4J.example.bayesian.gender;
+
 import net.sf.classifier4J.DefaultTokenizer;
 import net.sf.classifier4J.ICategorisedClassifier;
 import net.sf.classifier4J.ITokenizer;

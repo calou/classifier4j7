@@ -1,3 +1,4 @@
+package net.sf.classifier4J.example.bayesian.gender;
 
 public enum Gender {
     MALE("M"), FEMALE("F"), UNDEFINED(null);
