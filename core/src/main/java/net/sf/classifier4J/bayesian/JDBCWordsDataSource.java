@@ -117,7 +117,7 @@ public class JDBCWordsDataSource implements ICategorisedWordsDataSource {
         } finally {
             if (conn != null) {
                 try {
-                    connectionManager.returnConnection(conn);
+                    connectionManager.closeConnection(conn);
                 } catch (SQLException e1) {
                     // ignore
                 }
@@ -168,7 +168,7 @@ public class JDBCWordsDataSource implements ICategorisedWordsDataSource {
         } finally {
             if (conn != null) {
                 try {
-                    connectionManager.returnConnection(conn);
+                    connectionManager.closeConnection(conn);
                 } catch (SQLException e1) {
                     // ignore
                 }
@@ -237,7 +237,7 @@ public class JDBCWordsDataSource implements ICategorisedWordsDataSource {
         } finally {
             if (con != null) {
                 try {
-                    connectionManager.returnConnection(con);
+                    connectionManager.closeConnection(con);
                 } catch (SQLException e1) {
                     // ignore
                 }

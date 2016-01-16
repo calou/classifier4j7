@@ -61,9 +61,9 @@ import java.sql.SQLException;
  */
 public class DriverMangerJDBCConnectionManager implements IJDBCConnectionManager {
 
-    String dbURL;
-    String dbUser;
-    String dbPassword;
+    private String dbURL;
+    private String dbUser;
+    private String dbPassword;
 
     public DriverMangerJDBCConnectionManager(String url, String user, String password) {
         this.dbURL = url;
@@ -103,9 +103,9 @@ public class DriverMangerJDBCConnectionManager implements IJDBCConnectionManager
     }
 
     /**
-     * @see net.sf.classifier4J.bayesian.IJDBCConnectionManager#returnConnection(Connection con)
+     * @see net.sf.classifier4J.bayesian.IJDBCConnectionManager#closeConnection(Connection con)
      */
-    public void returnConnection(Connection con) throws SQLException {
+    public void closeConnection(Connection con) throws SQLException {
         con.close();
     }
 

@@ -61,6 +61,6 @@ import java.sql.SQLException;
 public interface IJDBCConnectionManager {
 
     Connection getConnection() throws SQLException;
-    void returnConnection(Connection con) throws SQLException;
+    void closeConnection(Connection con) throws SQLException;
 
 }

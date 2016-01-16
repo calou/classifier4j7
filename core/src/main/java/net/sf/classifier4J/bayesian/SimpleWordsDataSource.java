@@ -63,10 +63,19 @@ import java.util.Map;
  *  
  */
 public class SimpleWordsDataSource implements IWordsDataSource, Serializable {
+    private static final int DEFAULT_MAP_SIZE = 32;
 
-    private Map<String, WordProbability> words = new HashMap<>();
+    private final Map<String, WordProbability> words ;
 
-    public void setWordProbability(WordProbability wp) {
+    public SimpleWordsDataSource(int initialSize){
+        words = new HashMap<>(initialSize, 0.6f);
+    }
+
+    public SimpleWordsDataSource(){
+        this(DEFAULT_MAP_SIZE);
+    }
+
+    public final void setWordProbability(WordProbability wp) {
         words.put(wp.getWord(), wp);
     }
 
@@ -89,7 +98,7 @@ public class SimpleWordsDataSource implements IWordsDataSource, Serializable {
         if (wp == null) {
             wp = new WordProbability(word, 1, 0);
         } else {
-            wp.setMatchingCount(wp.getMatchingCount() + 1);
+            wp.incrementMatchingCount();
         }
         setWordProbability(wp);
     }
@@ -102,7 +111,7 @@ public class SimpleWordsDataSource implements IWordsDataSource, Serializable {
         if (wp == null) {
             wp = new WordProbability(word, 0, 1);
         } else {
-            wp.setNonMatchingCount(wp.getNonMatchingCount() + 1);
+            wp.incrementNonMatchingCount();
         }
         setWordProbability(wp);
     }

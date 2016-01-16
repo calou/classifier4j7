@@ -64,8 +64,8 @@ import java.sql.SQLException;
  */
 public class DataSourceJDBCConnectionManager implements IJDBCConnectionManager {
 
-    String datasourceContext;
-    DataSource dataSource;
+    private String datasourceContext;
+    private DataSource dataSource;
 
     public DataSourceJDBCConnectionManager(String ctx) throws NamingException, IllegalArgumentException {
         this.datasourceContext = ctx;
@@ -92,9 +92,9 @@ public class DataSourceJDBCConnectionManager implements IJDBCConnectionManager {
     }
 
     /**
-     * @see net.sf.classifier4J.bayesian.IJDBCConnectionManager#returnConnection(Connection con)
+     * @see net.sf.classifier4J.bayesian.IJDBCConnectionManager#closeConnection(Connection con)
      */
-    public void returnConnection(Connection con) throws SQLException {
+    public void closeConnection(Connection con) throws SQLException {
         if (con != null) {
             con.close();
         }        

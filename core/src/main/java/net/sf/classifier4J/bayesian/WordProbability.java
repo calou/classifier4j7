@@ -143,21 +143,31 @@ public class WordProbability implements Comparable, Serializable {
         calculateProbability();
     }
 
+    public void incrementMatchingCount() {
+        matchingCount++;
+    }
+
+    public void incrementNonMatchingCount() {
+        nonMatchingCount++;
+    }
+
     public void registerMatch() {
         if (matchingCount == Long.MAX_VALUE) {
             throw new UnsupportedOperationException("Long.MAX_VALUE reached, can't register more matches");
         }
-        matchingCount++;
+        incrementMatchingCount();
         calculateProbability();
     }
+
 
     public void registerNonMatch() {
         if (nonMatchingCount == Long.MAX_VALUE) {
             throw new UnsupportedOperationException("Long.MAX_VALUE reached, can't register more matches");
         }
-        nonMatchingCount++;
+        incrementNonMatchingCount();
         calculateProbability();
     }
+
 
     private void calculateProbability() {
         final double result;

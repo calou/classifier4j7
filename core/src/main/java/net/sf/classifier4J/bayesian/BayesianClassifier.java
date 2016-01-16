@@ -216,7 +216,6 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
                 } else {
                     wordsData.addNonMatch(transformWord(word));
                 }
-
             }
         }
     }
