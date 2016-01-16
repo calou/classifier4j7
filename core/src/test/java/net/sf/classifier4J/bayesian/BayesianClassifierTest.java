@@ -188,7 +188,7 @@ public class BayesianClassifierTest {
 	@Test
 	public void testGetTokenizer() throws Exception {
 		SimpleWordsDataSource wds = new SimpleWordsDataSource();
-		ITokenizer tokenizer = new DefaultTokenizer(BreakMethod.WORD);
+		ITokenizer tokenizer = new DefaultTokenizer(TokenizerMethod.SPLIT_BY_WORD);
 		BayesianClassifier classifier = new BayesianClassifier(wds, tokenizer);
 		
 		assertEquals(tokenizer, classifier.getTokenizer());
@@ -197,7 +197,7 @@ public class BayesianClassifierTest {
 	@Test
 	public void testGetStopWordProvider() throws Exception {
 		SimpleWordsDataSource wds = new SimpleWordsDataSource();
-		ITokenizer tokenizer = new DefaultTokenizer(BreakMethod.WORD);
+		ITokenizer tokenizer = new DefaultTokenizer(TokenizerMethod.SPLIT_BY_WORD);
 		IStopWordProvider stopWordProvider =  new DefaultStopWordsProvider();		
 		BayesianClassifier classifier = new BayesianClassifier(wds, tokenizer, stopWordProvider);
 		

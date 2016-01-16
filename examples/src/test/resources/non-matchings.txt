@@ -1,0 +1,6 @@
+company
+store
+société
+sarl
+gmbh
+restaurant

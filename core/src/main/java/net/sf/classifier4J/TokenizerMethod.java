@@ -1,20 +1,19 @@
 package net.sf.classifier4J;
 
-
-public enum BreakMethod {
+public enum TokenizerMethod {
     /**
      * Use a the "\W" (non-word characters) regexp to split the string passed to classify
      */
-    WORD("\\W"),
+    SPLIT_BY_WORD("\\W"),
 
     /**
      * Use a the "\s" (whitespace) regexp to split the string passed to classify
      */
-    WHITESPACE("\\s");
+    SPLIT_ON_WHITESPACE("\\s");
 
     private String regexp;
 
-    BreakMethod(String regexp){
+    TokenizerMethod(String regexp){
         this.regexp = regexp;
     }
 

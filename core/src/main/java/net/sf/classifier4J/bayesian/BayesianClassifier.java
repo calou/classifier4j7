@@ -96,7 +96,7 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
      * (set to BREAK_ON_WORD_BREAKS).
      */
     public BayesianClassifier() {
-        this(new SimpleWordsDataSource(), new DefaultTokenizer(BreakMethod.WORD));
+        this(new SimpleWordsDataSource(), new DefaultTokenizer(TokenizerMethod.SPLIT_BY_WORD));
     }
 
     /**
@@ -106,7 +106,7 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
      * @param wd a {@link net.sf.classifier4J.bayesian.IWordsDataSource}
      */
     public BayesianClassifier(IWordsDataSource wd) {
-        this(wd, new DefaultTokenizer(BreakMethod.WORD));
+        this(wd, new DefaultTokenizer(TokenizerMethod.SPLIT_BY_WORD));
     }
 
     /**

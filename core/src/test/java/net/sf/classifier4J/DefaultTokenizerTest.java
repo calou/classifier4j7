@@ -61,24 +61,24 @@ public class DefaultTokenizerTest {
 
     @Test
     public void constructor_BREAK_ON_WHITESPACE() {
-        new DefaultTokenizer(BreakMethod.WHITESPACE);
+        new DefaultTokenizer(TokenizerMethod.SPLIT_ON_WHITESPACE);
     }
 
     @Test
     public void constructor_BREAK_ON_WORD_BREAKS() {
-        new DefaultTokenizer(BreakMethod.WORD);
+        new DefaultTokenizer(TokenizerMethod.SPLIT_BY_WORD);
     }
 
     @Test
     public void tokenize_BREAK_ON_WHITESPACE() {
-        ITokenizer tok = new DefaultTokenizer(BreakMethod.WHITESPACE);
+        ITokenizer tok = new DefaultTokenizer(TokenizerMethod.SPLIT_ON_WHITESPACE);
         String[] words = tok.tokenize("My very,new string!");
         assertThat(words).containsExactly("My", "very,new", "string!");
     }
 
     @Test
     public void tokenize_BREAK_ON_WORD_BREAKS() {
-        ITokenizer tok = new DefaultTokenizer(BreakMethod.WORD);
+        ITokenizer tok = new DefaultTokenizer(TokenizerMethod.SPLIT_BY_WORD);
         String[] words = tok.tokenize("My very,new-string!and/more(NIO)peter's 1.4");
         assertThat(words).containsExactly("My", "very", "new", "string", "and", "more", "NIO", "peter", "s", "1", "4");
     }

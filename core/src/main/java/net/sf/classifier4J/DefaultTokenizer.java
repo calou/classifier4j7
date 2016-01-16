@@ -57,43 +57,43 @@ import net.sf.classifier4J.util.ToStringBuilder;
  */
 public class DefaultTokenizer implements ITokenizer {
 
-    private BreakMethod breakMethod;
+    private TokenizerMethod tokenizerMethod;
 
     /**
      * Constructor that using the BREAK_ON_WORD_BREAKS tokenizer config by default
      */
     public DefaultTokenizer() {
-        this(BreakMethod.WORD);
+        this(TokenizerMethod.SPLIT_BY_WORD);
     }
 
-    public DefaultTokenizer(BreakMethod breakMethod) {
-        setBreakMethod(breakMethod);
+    public DefaultTokenizer(TokenizerMethod tokenizerMethod) {
+        setTokenizerMethod(tokenizerMethod);
     }
 
     /**
      * @return The configuration setting used by {@link #tokenize(String)}.
      */
-    public BreakMethod getBreakMethod() {
-        return breakMethod;
+    public TokenizerMethod getTokenizerMethod() {
+        return tokenizerMethod;
     }
 
     /**
      * @param tokConfig The configuration setting for use by {@link #tokenize(String)}.
      */
-    public void setBreakMethod(BreakMethod tokConfig) {
-        breakMethod = tokConfig;
+    public void setTokenizerMethod(TokenizerMethod tokConfig) {
+        tokenizerMethod = tokConfig;
     }
 
     public String[] tokenize(String input) {
-        return (input != null) ? input.split(breakMethod.getRegexp()) : new String[0];
+        return (input != null) ? input.split(tokenizerMethod.getRegexp()) : new String[0];
     }
 
     public String toString() {
         ToStringBuilder toStringBuilder = new ToStringBuilder(this);
-        if (BreakMethod.WORD.equals(breakMethod)) {
-            toStringBuilder = toStringBuilder.append("breakMethod", "BREAK_ON_WORD_BREAKS");
+        if (TokenizerMethod.SPLIT_BY_WORD.equals(tokenizerMethod)) {
+            toStringBuilder = toStringBuilder.append("tokenizerMethod", "BREAK_ON_WORD_BREAKS");
         } else {
-            toStringBuilder = toStringBuilder.append("breakMethod", "BREAK_ON_WHITESPACE");
+            toStringBuilder = toStringBuilder.append("tokenizerMethod", "BREAK_ON_WHITESPACE");
         }
         return toStringBuilder.toString();
     }
