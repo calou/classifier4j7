@@ -1,7 +1,9 @@
 package net.sf.classifier4J.example.bayesian.gender;
 
+import net.sf.classifier4J.HppcWordsDataSource;
+import net.sf.classifier4J.NoStopWordProvider;
 import net.sf.classifier4J.bayesian.BayesianClassifier;
-import net.sf.classifier4J.bayesian.WordsDataSourceException;
+import net.sf.classifier4J.worddatasource.WordsDataSourceException;
 import net.sf.classifier4J.tokenizer.DefaultTokenizer;
 import net.sf.classifier4J.tokenizer.ITokenizer;
 import net.sf.classifier4J.tokenizer.TokenizerMethod;
@@ -176,12 +178,12 @@ public class HppcGenderBenchmarkTest {
         @Setup(Level.Trial)
         public void initialize() throws GenderException {
             defaultClassifier = new GenderBayesianClassifier();
-
             ITokenizer tokenizer = new DefaultTokenizer(TokenizerMethod.SPLIT_ON_WHITESPACE);
+            final NoStopWordProvider stopWordProvider = new NoStopWordProvider();
 
-            BayesianClassifier mHppcClassifier = new BayesianClassifier(new HppcWordsDataSource(), tokenizer, new NoStopWordProvider());
-            BayesianClassifier fHppcClassifier = new BayesianClassifier(new HppcWordsDataSource(), tokenizer, new NoStopWordProvider());
-            BayesianClassifier uHppcClassifier = new BayesianClassifier(new HppcWordsDataSource(), tokenizer, new NoStopWordProvider());
+            BayesianClassifier mHppcClassifier = new BayesianClassifier(new HppcWordsDataSource(), tokenizer, stopWordProvider);
+            BayesianClassifier fHppcClassifier = new BayesianClassifier(new HppcWordsDataSource(), tokenizer, stopWordProvider);
+            BayesianClassifier uHppcClassifier = new BayesianClassifier(new HppcWordsDataSource(), tokenizer, stopWordProvider);
             hppcClassifier = new GenderBayesianClassifier(mHppcClassifier, fHppcClassifier, uHppcClassifier);
 
             List<String> maleSamples = getLinesFromFile("gender/male.txt");

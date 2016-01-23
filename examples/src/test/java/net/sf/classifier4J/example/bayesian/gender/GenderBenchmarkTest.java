@@ -1,6 +1,6 @@
 package net.sf.classifier4J.example.bayesian.gender;
 
-import net.sf.classifier4J.bayesian.WordsDataSourceException;
+import net.sf.classifier4J.worddatasource.WordsDataSourceException;
 import org.junit.Test;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;

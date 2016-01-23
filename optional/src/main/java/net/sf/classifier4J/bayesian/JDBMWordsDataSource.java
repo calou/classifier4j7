@@ -58,6 +58,9 @@ import jdbm.helper.MRU;
 import jdbm.helper.StringComparator;
 import jdbm.recman.CacheRecordManager;
 import net.sf.classifier4J.ICategorisedClassifier;
+import net.sf.classifier4J.model.WordProbability;
+import net.sf.classifier4J.worddatasource.ICategorisedWordsDataSource;
+import net.sf.classifier4J.worddatasource.IWordsDataSource;
 
 import java.io.IOException;
 
@@ -107,21 +110,21 @@ public class JDBMWordsDataSource implements ICategorisedWordsDataSource {
 	}
 
 	/**
-	 * @see net.sf.classifier4J.bayesian.IWordsDataSource#addMatch(java.lang.String)
+	 * @see IWordsDataSource#addMatch(java.lang.String)
 	 */
 	public void addMatch(String word) {
 		addMatch(ICategorisedClassifier.DEFAULT_CATEGORY, word);
 	}
 
 	/**
-	 * @see net.sf.classifier4J.bayesian.IWordsDataSource#addNonMatch(java.lang.String)
+	 * @see IWordsDataSource#addNonMatch(java.lang.String)
 	 */
 	public void addNonMatch(String word) {
 		addNonMatch(ICategorisedClassifier.DEFAULT_CATEGORY, word);
 	}
 
 	/**
-	 * @see net.sf.classifier4J.bayesian.ICategorisedWordsDataSource#addMatch(java.lang.String, java.lang.String)
+	 * @see ICategorisedWordsDataSource#addMatch(java.lang.String, java.lang.String)
 	 */
 	public void addMatch(String category, String word) {
 		try {
@@ -139,7 +142,7 @@ public class JDBMWordsDataSource implements ICategorisedWordsDataSource {
 	}
 
 	/**
-	 * @see net.sf.classifier4J.bayesian.ICategorisedWordsDataSource#addNonMatch(java.lang.String, java.lang.String)
+	 * @see ICategorisedWordsDataSource#addNonMatch(java.lang.String, java.lang.String)
 	 */
 	public void addNonMatch(String category, String word) {
 		try {
@@ -156,14 +159,14 @@ public class JDBMWordsDataSource implements ICategorisedWordsDataSource {
 	}
 
 	/**
-	 * @see net.sf.classifier4J.bayesian.IWordsDataSource#getWordProbability(java.lang.String)
+	 * @see IWordsDataSource#getWordProbability(java.lang.String)
 	 */
 	public WordProbability getWordProbability(String word) {
 		return getWordProbability(ICategorisedClassifier.DEFAULT_CATEGORY, word);
 	}
 
 	/**
-	 * @see net.sf.classifier4J.bayesian.ICategorisedWordsDataSource#getWordProbability(java.lang.String, java.lang.String)
+	 * @see ICategorisedWordsDataSource#getWordProbability(java.lang.String, java.lang.String)
 	 */
 	public WordProbability getWordProbability(String category, String word) {
 		try {

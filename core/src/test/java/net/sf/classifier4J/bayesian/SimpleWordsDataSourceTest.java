@@ -51,6 +51,9 @@
 
 package net.sf.classifier4J.bayesian;
 
+import net.sf.classifier4J.model.WordProbability;
+import net.sf.classifier4J.worddatasource.IWordsDataSource;
+import net.sf.classifier4J.worddatasource.SimpleWordsDataSource;
 import org.junit.Before;
 import org.junit.Test;
 

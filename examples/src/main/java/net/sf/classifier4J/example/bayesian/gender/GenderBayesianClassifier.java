@@ -1,12 +1,11 @@
 package net.sf.classifier4J.example.bayesian.gender;
 
+import net.sf.classifier4J.CommonsLangTokenizer;
 import net.sf.classifier4J.ICategorisedClassifier;
 import net.sf.classifier4J.bayesian.BayesianClassifier;
-import net.sf.classifier4J.bayesian.SimpleWordsDataSource;
-import net.sf.classifier4J.bayesian.WordsDataSourceException;
-import net.sf.classifier4J.tokenizer.DefaultTokenizer;
+import net.sf.classifier4J.worddatasource.SimpleWordsDataSource;
+import net.sf.classifier4J.worddatasource.WordsDataSourceException;
 import net.sf.classifier4J.tokenizer.ITokenizer;
-import net.sf.classifier4J.tokenizer.TokenizerMethod;
 
 public class GenderBayesianClassifier {
     public static final double TRUE_THRESHOLD = 0.9;

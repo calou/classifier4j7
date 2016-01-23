@@ -2,6 +2,7 @@ package net.sf.classifier4J.bayesian;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import net.sf.classifier4J.worddatasource.JDBCWordsDataSource;
 import org.junit.Before;
 import org.junit.Test;
 

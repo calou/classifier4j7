@@ -53,11 +53,13 @@
 package net.sf.classifier4J.bayesian;
 
 import net.sf.classifier4J.*;
+import net.sf.classifier4J.model.WordProbability;
 import net.sf.classifier4J.stopword.DefaultStopWordsProvider;
 import net.sf.classifier4J.stopword.IStopWordProvider;
 import net.sf.classifier4J.tokenizer.DefaultTokenizer;
 import net.sf.classifier4J.tokenizer.ITokenizer;
 import net.sf.classifier4J.tokenizer.TokenizerMethod;
+import net.sf.classifier4J.worddatasource.SimpleWordsDataSource;
 import org.junit.Test;
 
 import java.util.Arrays;

@@ -52,12 +52,17 @@
 package net.sf.classifier4J.bayesian;
 
 import net.sf.classifier4J.*;
+import net.sf.classifier4J.model.WordProbability;
 import net.sf.classifier4J.stopword.DefaultStopWordsProvider;
 import net.sf.classifier4J.stopword.IStopWordProvider;
 import net.sf.classifier4J.tokenizer.DefaultTokenizer;
 import net.sf.classifier4J.tokenizer.ITokenizer;
 import net.sf.classifier4J.tokenizer.TokenizerMethod;
 import net.sf.classifier4J.util.ToStringBuilder;
+import net.sf.classifier4J.worddatasource.ICategorisedWordsDataSource;
+import net.sf.classifier4J.worddatasource.IWordsDataSource;
+import net.sf.classifier4J.worddatasource.SimpleWordsDataSource;
+import net.sf.classifier4J.worddatasource.WordsDataSourceException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,7 +74,7 @@ import java.util.List;
  * <p/>
  * <p>The basic usage pattern for this class is:
  * <ol>
- * <li>Create a instance of {@link net.sf.classifier4J.bayesian.IWordsDataSource}</li>
+ * <li>Create a instance of {@link IWordsDataSource}</li>
  * <li>Create a new instance of BayesianClassifier, passing the IWordsDataSource
  * to the constructor</li>
  * <li>Call {@link net.sf.classifier4J.IClassifier#classify(java.lang.String) }
@@ -107,7 +112,7 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
      * Constructor for BayesianClassifier that specifies a datasource. The
      * DefaultTokenizer (set to BREAK_ON_WORD_BREAKS) will be used.
      *
-     * @param wd a {@link net.sf.classifier4J.bayesian.IWordsDataSource}
+     * @param wd a {@link IWordsDataSource}
      */
     public BayesianClassifier(IWordsDataSource wd) {
         this(wd, new DefaultTokenizer(TokenizerMethod.SPLIT_BY_WORD));
@@ -116,7 +121,7 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
     /**
      * Constructor for BayesianClassifier that specifies a datasource & tokenizer
      *
-     * @param wd        a {@link net.sf.classifier4J.bayesian.IWordsDataSource}
+     * @param wd        a {@link IWordsDataSource}
      * @param tokenizer a {@link ITokenizer}
      */
     public BayesianClassifier(IWordsDataSource wd, ITokenizer tokenizer) {
@@ -127,7 +132,7 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
      * Constructor for BayesianClassifier that specifies a datasource, tokenizer
      * and stop words provider
      *
-     * @param wd        a {@link net.sf.classifier4J.bayesian.IWordsDataSource}
+     * @param wd        a {@link IWordsDataSource}
      * @param tokenizer a {@link ITokenizer}
      * @param swp       a {@link IStopWordProvider}
      */
@@ -311,7 +316,7 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
         return word != null && !"".equals(word) && !stopWordProvider.isStopWord(word);
     }
 
-    protected static double normalizeSignificance(double sig) {
+    public static double normalizeSignificance(double sig) {
         if (Double.compare(IClassifier.UPPER_BOUND, sig) < 0) {
             return IClassifier.UPPER_BOUND;
         } else if (Double.compare(IClassifier.LOWER_BOUND, sig) > 0) {
@@ -337,7 +342,7 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
     }
 
     /**
-     * @return the {@link net.sf.classifier4J.bayesian.IWordsDataSource} used
+     * @return the {@link IWordsDataSource} used
      * by this classifier
      */
     public IWordsDataSource getWordsDataSource() {

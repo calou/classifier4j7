@@ -52,6 +52,7 @@
 package net.sf.classifier4J.bayesian;
 
 import net.sf.classifier4J.IClassifier;
+import net.sf.classifier4J.model.WordProbability;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -91,7 +92,6 @@ public class WordProbabilityTest {
 
     @Test
     public void testCalculateProbability() {
-
         WordProbability wp = new WordProbability("", 10, 10);
         assertEquals(IClassifier.NEUTRAL_PROBABILITY, wp.getProbability(), 0);
 
