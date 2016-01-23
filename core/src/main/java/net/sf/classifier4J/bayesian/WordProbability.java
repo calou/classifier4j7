@@ -79,8 +79,8 @@ public class WordProbability implements Comparable, Serializable {
     private String word = "";
     private String category = ICategorisedClassifier.DEFAULT_CATEGORY;
 
-    private long matchingCount = UNDEFINED;
-    private long nonMatchingCount = UNDEFINED;
+    private long matchingCount;
+    private long nonMatchingCount;
 
     private double probability = IClassifier.NEUTRAL_PROBABILITY;
 
@@ -90,16 +90,14 @@ public class WordProbability implements Comparable, Serializable {
     }
 
     public WordProbability(String w) {
+        this();
         setWord(w);
-        setMatchingCount(0);
-        setNonMatchingCount(0);
     }
 
     public WordProbability(String c, String w) {
+        this();
         setCategory(c);
         setWord(w);
-        setMatchingCount(0);
-        setNonMatchingCount(0);
     }
 
     public WordProbability(String w, double probability) {
@@ -159,7 +157,6 @@ public class WordProbability implements Comparable, Serializable {
         calculateProbability();
     }
 
-
     public void registerNonMatch() {
         if (nonMatchingCount == Long.MAX_VALUE) {
             throw new UnsupportedOperationException("Long.MAX_VALUE reached, can't register more matches");
@@ -174,7 +171,8 @@ public class WordProbability implements Comparable, Serializable {
         if (matchingCount == 0) {
             result = nonMatchingCount == 0 ? IClassifier.NEUTRAL_PROBABILITY : IClassifier.LOWER_BOUND;
         } else {
-            result = BayesianClassifier.normalizeSignificance((double) matchingCount / (double) (matchingCount + nonMatchingCount));
+            final double significance = (double) matchingCount / (double) (matchingCount + nonMatchingCount);
+            result = BayesianClassifier.normalizeSignificance(significance);
         }
         probability = result;
     }
@@ -187,22 +185,13 @@ public class WordProbability implements Comparable, Serializable {
     }
 
     public long getMatchingCount() {
-        if (matchingCount == UNDEFINED) {
-            throw new UnsupportedOperationException("MatchingCount has not been defined");
-        }
         return matchingCount;
     }
 
     public long getNonMatchingCount() {
-        if (nonMatchingCount == UNDEFINED) {
-            throw new UnsupportedOperationException("nonMatchingCount has not been defined");
-        }
         return nonMatchingCount;
     }
 
-    /**
-     * @return
-     */
     public String getWord() {
         return word;
     }

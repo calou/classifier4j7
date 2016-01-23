@@ -53,54 +53,49 @@ package net.sf.classifier4J.bayesian;
 
 import net.sf.classifier4J.ICategorisedClassifier;
 
-import java.sql.*;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
- * 
  * <p>A JDBC based datasource. It requires a table of the following structure (tested in MySQL 4):
- * 
+ * <p/>
  * <pre>
  * CREATE TABLE word_probability (
- *	word			VARCHAR(255) NOT NULL,
- *	category		VARCHAR(20) NOT NULL,
- *	match_count		INT DEFAULT 0 NOT NULL,
- *	nonmatch_count	INT DEFAULT 0 NOT NULL,
- *	PRIMARY KEY(word, category)
+ * 	word			VARCHAR(255) NOT NULL,
+ * 	category		VARCHAR(20) NOT NULL,
+ * 	match_count		INT DEFAULT 0 NOT NULL,
+ * 	nonmatch_count	INT DEFAULT 0 NOT NULL,
+ * 	PRIMARY KEY(word, category)
  * )
  * </pre>
- *
- *</p>
- *<p>It will truncate any word longer than 255 characters to 255 characters</p>
+ * <p/>
+ * </p>
+ * <p>It will truncate any word longer than 255 characters to 255 characters</p>
  *
  * @author Nick Lothian
  * @author Peter Leschev
- *  
  */
 public class JDBCWordsDataSource implements ICategorisedWordsDataSource {
 
-    IJDBCConnectionManager connectionManager;
-
+    private DataSource dataSource;
     /**
      * Create a JDBCWordsDataSource using the DEFAULT_CATEGORY ("DEFAULT")
-     * 
-     * @param cm The connection manager to use
+     *
+     * @param ds The connection manager to use
      */
-    public JDBCWordsDataSource(IJDBCConnectionManager cm) throws WordsDataSourceException {
-        this.connectionManager = cm;
-        createTable();
+    public JDBCWordsDataSource(DataSource ds) throws WordsDataSourceException {
+        this.dataSource = ds;
     }
 
     public WordProbability getWordProbability(String category, String word) throws WordsDataSourceException {
-
-        WordProbability wp = null;
-        String method = "getWordProbability()";
-
         int matchingCount = 0;
         int nonMatchingCount = 0;
 
-        Connection conn = null;
-        try {
-            conn = connectionManager.getConnection();
+        try (Connection conn = dataSource.getConnection()) {
+
             PreparedStatement ps = conn.prepareStatement("SELECT match_count, nonmatch_count FROM word_probability WHERE word = ? AND category = ?");
             ps.setString(1, word);
             ps.setString(2, category);
@@ -110,20 +105,12 @@ public class JDBCWordsDataSource implements ICategorisedWordsDataSource {
                 matchingCount = rs.getInt("match_count");
                 nonMatchingCount = rs.getInt("nonmatch_count");
             }
-            wp = new WordProbability(word, matchingCount, nonMatchingCount);
+            rs.close();
+            return new WordProbability(word, matchingCount, nonMatchingCount);
 
         } catch (SQLException e) {
             throw new WordsDataSourceException("Problem obtaining WordProbability from database", e);
-        } finally {
-            if (conn != null) {
-                try {
-                    connectionManager.closeConnection(conn);
-                } catch (SQLException e1) {
-                    // ignore
-                }
-            }
         }
-        return wp;
     }
 
     public WordProbability getWordProbability(String word) throws WordsDataSourceException {
@@ -131,50 +118,38 @@ public class JDBCWordsDataSource implements ICategorisedWordsDataSource {
     }
 
     private void updateWordProbability(String category, String word, boolean isMatch) throws WordsDataSourceException {
-        String fieldname = "nonmatch_count";
-        if (isMatch) {
-            fieldname = "match_count";
-        }
+        String fieldname = isMatch ? "match_count" : "nonmatch_count";
 
         // truncate word at 255 characters
         if (word.length() > 255) {
             word = word.substring(0, 254);
         }
 
-        Connection conn = null;
-        try {
-            conn = connectionManager.getConnection();
-            PreparedStatement insertStatement = conn.prepareStatement("INSERT INTO word_probability (word, category) VALUES (?, ?)");
+        try (Connection conn = dataSource.getConnection()) {
             PreparedStatement selectStatement = conn.prepareStatement("SELECT 1 FROM word_probability WHERE word = ? AND category = ?");
-            PreparedStatement updateStatement = conn.prepareStatement("UPDATE word_probability SET " + fieldname + " = " + fieldname + " + 1 WHERE word = ? AND category = ?");
-
             selectStatement.setString(1, word);
             selectStatement.setString(2, category);
             ResultSet rs = selectStatement.executeQuery();
             if (!rs.next()) {
+                PreparedStatement insertStatement = conn.prepareStatement("INSERT INTO word_probability (word, category, match_count, nonmatch_count) VALUES (?, ?, ?, ?)");
                 // word is not in table
                 // insert the word
                 insertStatement.setString(1, word);
                 insertStatement.setString(2, category);
+                insertStatement.setInt(3, isMatch ? 1 : 0);
+                insertStatement.setInt(4, isMatch ? 0 : 1);
                 insertStatement.execute();
+            } else {
+                PreparedStatement updateStatement = conn.prepareStatement("UPDATE word_probability SET " + fieldname + " = " + fieldname + " + 1 WHERE word = ? AND category = ?");
+                // update the word count
+                updateStatement.setString(1, word);
+                updateStatement.setString(2, category);
+                updateStatement.execute();
             }
-            // update the word count
-            updateStatement.setString(1, word);
-            updateStatement.setString(2, category);
-            updateStatement.execute();
 
         } catch (SQLException e) {
             throw new WordsDataSourceException("Problem updating WordProbability", e);
-        } finally {
-            if (conn != null) {
-                try {
-                    connectionManager.closeConnection(conn);
-                } catch (SQLException e1) {
-                    // ignore
-                }
-            }
         }
-
     }
 
     public void addMatch(String category, String word) throws WordsDataSourceException {
@@ -197,51 +172,5 @@ public class JDBCWordsDataSource implements ICategorisedWordsDataSource {
 
     public void addNonMatch(String word) throws WordsDataSourceException {
         updateWordProbability(ICategorisedClassifier.DEFAULT_CATEGORY, word, false);
-    }
-
-    /**
-     * Create the word_probability table if it does not already
-     * exist. Tested successfully with MySQL 4 & HSQLDB. See
-     * comments in code for Axion 1.0M1 issues. 
-     *   
-     * 
-     * @throws WordsDataSourceException
-     */
-    private void createTable() throws WordsDataSourceException {
-        Connection con = null;
-        try {
-            con = connectionManager.getConnection();
-
-            // check if the word_probability table exists 
-            DatabaseMetaData dbm = con.getMetaData();
-            ResultSet rs = dbm.getTables(null, null, "word_probability", null);
-            if (!rs.next()) {
-                // the table does not exist
-                Statement stmt = con.createStatement();
-                //	Under Axion 1.0M1, use 			
-                //	 stmt.executeUpdate( "CREATE TABLE word_probability ( "
-                //			+ " word			VARCHAR(255) NOT NULL,"
-                //			+ " category		VARCHAR(20) NOT NULL,"
-                //			+ " match_count		INTEGER NOT NULL,"
-                //			+ " nonmatch_count	INTEGER NOT NULL, "
-                //			+ " PRIMARY KEY(word, category) ) ");				
-                stmt.executeUpdate("CREATE TABLE word_probability ( " 
-                            + " word			VARCHAR(255) NOT NULL," 
-                            + " category		VARCHAR(20) NOT NULL," 
-                            + " match_count		INT DEFAULT 0 NOT NULL," 
-                            + " nonmatch_count	INT DEFAULT 0 NOT NULL, " 
-                            + " PRIMARY KEY(word, category) ) ");
-            }
-        } catch (SQLException e) {
-            throw new WordsDataSourceException("Problem creating table", e); // we can't recover from this				
-        } finally {
-            if (con != null) {
-                try {
-                    connectionManager.closeConnection(con);
-                } catch (SQLException e1) {
-                    // ignore
-                }
-            }
-        }
     }
 }

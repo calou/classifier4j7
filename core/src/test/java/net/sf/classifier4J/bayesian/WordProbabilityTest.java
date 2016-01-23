@@ -66,16 +66,9 @@ public class WordProbabilityTest {
     public void testAccessors() {
         WordProbability wp = new WordProbability("", 0.96d);
         assertEquals("", wp.getWord());
-        try {
-            assertEquals(0, wp.getMatchingCount());
-            fail("Shouldn't be able to obtain matching count when we haven't set them");
-        } catch (UnsupportedOperationException e) {
-        }
-        try {
-            assertEquals(0, wp.getNonMatchingCount());
-            fail("Shouldn't be able to obtain matching count when we haven't set them");
-        } catch (UnsupportedOperationException e) {
-        }
+
+        assertEquals(-1, wp.getMatchingCount());
+        assertEquals(-1, wp.getNonMatchingCount());
         assertEquals(0.96d, wp.getProbability(), 0);
 
         wp = new WordProbability("aWord", 10, 30);
@@ -87,8 +80,7 @@ public class WordProbabilityTest {
         try {
             wp.setMatchingCount(-10);
             fail("Shouldn't be able to set -ve matchingCount");
-        } catch (IllegalArgumentException e) {
-        }
+        } catch (IllegalArgumentException e) {}
 
         try {
             wp.setNonMatchingCount(-10);
