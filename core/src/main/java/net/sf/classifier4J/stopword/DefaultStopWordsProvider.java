@@ -49,30 +49,46 @@
  * ====================================================================
  */
 
+package net.sf.classifier4J.stopword;
 
-package net.sf.classifier4J;
+import net.sf.classifier4J.util.ToStringBuilder;
 
-import net.sf.classifier4J.stopword.CustomizableStopWordProvider;
-import net.sf.classifier4J.stopword.IStopWordProvider;
-import org.junit.Test;
-
-import java.io.IOException;
-
-import static org.junit.Assert.*;
+import java.util.Arrays;
 
 
-public class CustomizableStopWordProviderTest {
-    @Test
-    public void testCustomizableStopWordProvider() {
-        try {
-            IStopWordProvider swp = new CustomizableStopWordProvider();
-            assertNotNull(swp);
-            assertTrue(swp.isStopWord("a"));
-            assertTrue(swp.isStopWord("zero"));
-            assertTrue(!swp.isStopWord("notastopword"));
-        } catch (IOException e) {            
-            e.printStackTrace();
-            fail(e.getLocalizedMessage());
-        }
+/**
+ * @author Nick Lothian
+ * @author Peter Leschev
+ */
+public class DefaultStopWordsProvider implements IStopWordProvider {
+    // This array is sorted in the constructor
+    private String[] stopWords = {"a", "and", "the", "me", "i", "of", "if", "it", "is", "they", "there", "but", "or", "to", "this", "you", "in", "your", "on", "for", "as", "are", "that", "with", "have", "be", "at", "or", "was", "so", "out", "not", "an"};
+    private String[] sortedStopWords = null;
+
+    public DefaultStopWordsProvider() {
+        sortedStopWords = getStopWords();
+        Arrays.sort(sortedStopWords);
+    }
+
+    /**
+     * getter method which can be overridden to
+     * supply the stop words. The array returned by this
+     * method is sorted and then used internally
+     *
+     * @return the array of stop words
+     */
+    public String[] getStopWords() {
+        return stopWords;
+    }
+
+    /**
+     * @see IStopWordProvider#isStopWord(java.lang.String)
+     */
+    public boolean isStopWord(String word) {
+        return word == null || "".equals(word) ? false : (Arrays.binarySearch(sortedStopWords, word.toLowerCase()) >= 0);
+    }
+
+    public String toString() {
+        return new ToStringBuilder(this).append("stopWords.size()", sortedStopWords.length).toString();
     }
 }

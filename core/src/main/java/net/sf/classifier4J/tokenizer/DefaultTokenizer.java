@@ -48,31 +48,53 @@
  * SUCH DAMAGE.
  * ====================================================================
  */
+package net.sf.classifier4J.tokenizer;
 
+import net.sf.classifier4J.util.ToStringBuilder;
 
-package net.sf.classifier4J;
+/**
+ * @author Peter Leschev
+ */
+public class DefaultTokenizer implements ITokenizer {
 
-import net.sf.classifier4J.stopword.CustomizableStopWordProvider;
-import net.sf.classifier4J.stopword.IStopWordProvider;
-import org.junit.Test;
+    private TokenizerMethod tokenizerMethod;
 
-import java.io.IOException;
+    /**
+     * Constructor that using the BREAK_ON_WORD_BREAKS tokenizer config by default
+     */
+    public DefaultTokenizer() {
+        this(TokenizerMethod.SPLIT_BY_WORD);
+    }
 
-import static org.junit.Assert.*;
+    public DefaultTokenizer(TokenizerMethod tokenizerMethod) {
+        setTokenizerMethod(tokenizerMethod);
+    }
 
+    /**
+     * @return The configuration setting used by {@link #tokenize(String)}.
+     */
+    public TokenizerMethod getTokenizerMethod() {
+        return tokenizerMethod;
+    }
 
-public class CustomizableStopWordProviderTest {
-    @Test
-    public void testCustomizableStopWordProvider() {
-        try {
-            IStopWordProvider swp = new CustomizableStopWordProvider();
-            assertNotNull(swp);
-            assertTrue(swp.isStopWord("a"));
-            assertTrue(swp.isStopWord("zero"));
-            assertTrue(!swp.isStopWord("notastopword"));
-        } catch (IOException e) {            
-            e.printStackTrace();
-            fail(e.getLocalizedMessage());
+    /**
+     * @param tokConfig The configuration setting for use by {@link #tokenize(String)}.
+     */
+    public void setTokenizerMethod(TokenizerMethod tokConfig) {
+        tokenizerMethod = tokConfig;
+    }
+
+    public String[] tokenize(String input) {
+        return (input != null) ? input.split(tokenizerMethod.getRegexp()) : new String[0];
+    }
+
+    public String toString() {
+        ToStringBuilder toStringBuilder = new ToStringBuilder(this);
+        if (TokenizerMethod.SPLIT_BY_WORD.equals(tokenizerMethod)) {
+            toStringBuilder = toStringBuilder.append("tokenizerMethod", "BREAK_ON_WORD_BREAKS");
+        } else {
+            toStringBuilder = toStringBuilder.append("tokenizerMethod", "BREAK_ON_WHITESPACE");
         }
+        return toStringBuilder.toString();
     }
 }

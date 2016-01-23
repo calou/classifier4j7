@@ -52,6 +52,8 @@
 package net.sf.classifier4J;
 
 
+import net.sf.classifier4J.stopword.DefaultStopWordsProvider;
+import net.sf.classifier4J.stopword.IStopWordProvider;
 import org.junit.Before;
 import org.junit.Test;
 

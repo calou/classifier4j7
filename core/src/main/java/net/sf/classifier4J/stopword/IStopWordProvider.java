@@ -49,30 +49,20 @@
  * ====================================================================
  */
 
+package net.sf.classifier4J.stopword;
 
-package net.sf.classifier4J;
+public interface IStopWordProvider {
+    /**
+     * Check if a word is a stop word
+     * 
+     * @param word The word to check
+     * @return true if the word is a stop word, false otherwise
+     */
+    boolean isStopWord(String word);
 
-import net.sf.classifier4J.stopword.CustomizableStopWordProvider;
-import net.sf.classifier4J.stopword.IStopWordProvider;
-import org.junit.Test;
-
-import java.io.IOException;
-
-import static org.junit.Assert.*;
-
-
-public class CustomizableStopWordProviderTest {
-    @Test
-    public void testCustomizableStopWordProvider() {
-        try {
-            IStopWordProvider swp = new CustomizableStopWordProvider();
-            assertNotNull(swp);
-            assertTrue(swp.isStopWord("a"));
-            assertTrue(swp.isStopWord("zero"));
-            assertTrue(!swp.isStopWord("notastopword"));
-        } catch (IOException e) {            
-            e.printStackTrace();
-            fail(e.getLocalizedMessage());
-        }
-    }
+    /**
+     * Return all stop words
+     * @return array of string 
+     */
+    String[] getStopWords();
 }

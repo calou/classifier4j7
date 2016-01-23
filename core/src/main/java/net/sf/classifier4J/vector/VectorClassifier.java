@@ -2,6 +2,10 @@
 package net.sf.classifier4J.vector;
 
 import net.sf.classifier4J.*;
+import net.sf.classifier4J.stopword.DefaultStopWordsProvider;
+import net.sf.classifier4J.stopword.IStopWordProvider;
+import net.sf.classifier4J.tokenizer.DefaultTokenizer;
+import net.sf.classifier4J.tokenizer.ITokenizer;
 
 import java.util.Arrays;
 import java.util.Map;

@@ -49,30 +49,77 @@
  * ====================================================================
  */
 
+package net.sf.classifier4J.example.bayesian.gender;
 
-package net.sf.classifier4J;
+import com.carrotsearch.hppc.ObjectObjectHashMap;
+import net.sf.classifier4J.bayesian.IWordsDataSource;
+import net.sf.classifier4J.bayesian.WordProbability;
 
-import net.sf.classifier4J.stopword.CustomizableStopWordProvider;
-import net.sf.classifier4J.stopword.IStopWordProvider;
-import org.junit.Test;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-import java.io.IOException;
+/**
+ * @author Nick Lothian
+ * @author Peter Leschev
+ */
+public class HppcWordsDataSource implements IWordsDataSource, Serializable {
+    private static final int DEFAULT_MAP_SIZE = 5000;
 
-import static org.junit.Assert.*;
+    private final ObjectObjectHashMap<String, WordProbability> words;
 
+    public HppcWordsDataSource(int initialSize) {
+        words = new ObjectObjectHashMap<String, WordProbability>();
+    }
 
-public class CustomizableStopWordProviderTest {
-    @Test
-    public void testCustomizableStopWordProvider() {
-        try {
-            IStopWordProvider swp = new CustomizableStopWordProvider();
-            assertNotNull(swp);
-            assertTrue(swp.isStopWord("a"));
-            assertTrue(swp.isStopWord("zero"));
-            assertTrue(!swp.isStopWord("notastopword"));
-        } catch (IOException e) {            
-            e.printStackTrace();
-            fail(e.getLocalizedMessage());
+    public HppcWordsDataSource() {
+        this(DEFAULT_MAP_SIZE);
+    }
+
+    public final void setWordProbability(WordProbability wp) {
+        words.put(wp.getWord(), wp);
+    }
+
+    /**
+     * @see IWordsDataSource#getWordProbability(String)
+     */
+    public WordProbability getWordProbability(String word) {
+        return words.get(word);
+    }
+
+    public Collection<WordProbability> getAll() {
+        List<WordProbability> wps = new ArrayList<>(words.size());
+
+        for(WordProbability wp : (WordProbability[])words.values){
+            wps.add(wp);
         }
+        return wps;
+    }
+
+    /**
+     * @see IWordsDataSource#addMatch(String)
+     */
+    public void addMatch(String word) {
+        WordProbability wp = words.get(word);
+        if (wp == null) {
+            wp = new WordProbability(word, 1, 0);
+        } else {
+            wp.incrementMatchingCount();
+        }
+        setWordProbability(wp);
+    }
+
+    /**
+     * @see IWordsDataSource#addNonMatch(String)
+     */
+    public void addNonMatch(String word) {
+        WordProbability wp = words.get(word);
+        if (wp == null) {
+            wp = new WordProbability(word, 0, 1);
+        } else {
+            wp.incrementNonMatchingCount();
+        }
+        setWordProbability(wp);
     }
 }

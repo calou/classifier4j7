@@ -50,6 +50,7 @@
  */
 package net.sf.classifier4J;
 
+import net.sf.classifier4J.tokenizer.DefaultTokenizer;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;

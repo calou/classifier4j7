@@ -52,6 +52,11 @@
 package net.sf.classifier4J.bayesian;
 
 import net.sf.classifier4J.*;
+import net.sf.classifier4J.stopword.DefaultStopWordsProvider;
+import net.sf.classifier4J.stopword.IStopWordProvider;
+import net.sf.classifier4J.tokenizer.DefaultTokenizer;
+import net.sf.classifier4J.tokenizer.ITokenizer;
+import net.sf.classifier4J.tokenizer.TokenizerMethod;
 import net.sf.classifier4J.util.ToStringBuilder;
 
 import java.util.ArrayList;
@@ -112,7 +117,7 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
      * Constructor for BayesianClassifier that specifies a datasource & tokenizer
      *
      * @param wd        a {@link net.sf.classifier4J.bayesian.IWordsDataSource}
-     * @param tokenizer a {@link net.sf.classifier4J.ITokenizer}
+     * @param tokenizer a {@link ITokenizer}
      */
     public BayesianClassifier(IWordsDataSource wd, ITokenizer tokenizer) {
         this(wd, tokenizer, new DefaultStopWordsProvider());
@@ -123,8 +128,8 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
      * and stop words provider
      *
      * @param wd        a {@link net.sf.classifier4J.bayesian.IWordsDataSource}
-     * @param tokenizer a {@link net.sf.classifier4J.ITokenizer}
-     * @param swp       a {@link net.sf.classifier4J.IStopWordProvider}
+     * @param tokenizer a {@link ITokenizer}
+     * @param swp       a {@link IStopWordProvider}
      */
     public BayesianClassifier(IWordsDataSource wd, ITokenizer tokenizer, IStopWordProvider swp) {
         this.wordsData = wd;
@@ -185,7 +190,7 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
     }
 
     protected double classify(String category, String words[]) throws WordsDataSourceException {
-        List<WordProbability> wps = calcWordsProbability(category, words);
+        List<WordProbability> wps = calculateWordProbabilities(category, words);
         return normalizeSignificance(calculateOverallProbability(wps));
     }
 
@@ -266,7 +271,7 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
         }
     }
 
-    private List<WordProbability> calcWordsProbability(String category, String[] words) throws WordsDataSourceException {
+    private List<WordProbability> calculateWordProbabilities(String category, String[] words) throws WordsDataSourceException {
         if (category == null) {
             throw new IllegalArgumentException("category cannont be null");
         }
@@ -340,7 +345,7 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
     }
 
     /**
-     * @return the {@link net.sf.classifier4J.ITokenizer} used
+     * @return the {@link ITokenizer} used
      * by this classifier
      */
     public ITokenizer getTokenizer() {
@@ -348,7 +353,7 @@ public class BayesianClassifier extends AbstractCategorizedTrainableClassifier {
     }
 
     /**
-     * @return the {@link net.sf.classifier4J.IStopWordProvider} used
+     * @return the {@link IStopWordProvider} used
      * by this classifier
      */
     public IStopWordProvider getStopWordProvider() {

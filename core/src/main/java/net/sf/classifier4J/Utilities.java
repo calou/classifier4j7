@@ -51,6 +51,11 @@
 
 package net.sf.classifier4J;
 
+import net.sf.classifier4J.stopword.DefaultStopWordsProvider;
+import net.sf.classifier4J.stopword.IStopWordProvider;
+import net.sf.classifier4J.tokenizer.DefaultTokenizer;
+import net.sf.classifier4J.tokenizer.ITokenizer;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;

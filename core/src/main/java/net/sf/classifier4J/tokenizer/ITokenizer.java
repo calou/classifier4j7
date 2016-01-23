@@ -48,31 +48,20 @@
  * SUCH DAMAGE.
  * ====================================================================
  */
+package net.sf.classifier4J.tokenizer;
 
+/** 
+ * @author Peter Leschev
+ */
+public interface ITokenizer {
 
-package net.sf.classifier4J;
+    /**
+     * <p>Splits up the string passed into the tokens which
+     * have individual probabilities.</p>
+         *
+         * @return Should never return null, rather it should return an empty array of
+         *         Strings if there aren't any elements to return.
+     */
+    String[] tokenize(String input);
 
-import net.sf.classifier4J.stopword.CustomizableStopWordProvider;
-import net.sf.classifier4J.stopword.IStopWordProvider;
-import org.junit.Test;
-
-import java.io.IOException;
-
-import static org.junit.Assert.*;
-
-
-public class CustomizableStopWordProviderTest {
-    @Test
-    public void testCustomizableStopWordProvider() {
-        try {
-            IStopWordProvider swp = new CustomizableStopWordProvider();
-            assertNotNull(swp);
-            assertTrue(swp.isStopWord("a"));
-            assertTrue(swp.isStopWord("zero"));
-            assertTrue(!swp.isStopWord("notastopword"));
-        } catch (IOException e) {            
-            e.printStackTrace();
-            fail(e.getLocalizedMessage());
-        }
-    }
 }

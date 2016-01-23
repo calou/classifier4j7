@@ -49,30 +49,58 @@
  * ====================================================================
  */
 
+package net.sf.classifier4J.stopword;
 
-package net.sf.classifier4J;
+import net.sf.classifier4J.util.Resource;
 
-import net.sf.classifier4J.stopword.CustomizableStopWordProvider;
-import net.sf.classifier4J.stopword.IStopWordProvider;
-import org.junit.Test;
-
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-import static org.junit.Assert.*;
+public class CustomizableStopWordProvider implements IStopWordProvider {
 
+    private Resource resource;
+    private String[] words;
 
-public class CustomizableStopWordProviderTest {
-    @Test
-    public void testCustomizableStopWordProvider() {
-        try {
-            IStopWordProvider swp = new CustomizableStopWordProvider();
-            assertNotNull(swp);
-            assertTrue(swp.isStopWord("a"));
-            assertTrue(swp.isStopWord("zero"));
-            assertTrue(!swp.isStopWord("notastopword"));
-        } catch (IOException e) {            
-            e.printStackTrace();
-            fail(e.getLocalizedMessage());
-        }
+    public static final String DEFAULT_STOPWORD_PROVIDER_RESOURCENAME = "defaultStopWords.txt";
+
+    /**
+     * 
+     * @param resourcename Identifies the name of a textfile on the classpath that contains
+     * a list of stop words, one on each line
+     */
+    public CustomizableStopWordProvider(String resourcename) throws IOException {
+        resource = new Resource(resourcename);
+        init();
     }
+
+    public CustomizableStopWordProvider() throws IOException {
+        this(DEFAULT_STOPWORD_PROVIDER_RESOURCENAME);
+    }
+
+    protected void init() throws IOException {
+        ArrayList<String> wordsLst = new ArrayList();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
+        String word;
+        while ((word = reader.readLine()) != null) {
+            wordsLst.add(word.trim());
+        }
+        words = wordsLst.toArray(new String[wordsLst.size()]);
+        Arrays.sort(words);
+    }
+
+    /**
+     * @see IStopWordProvider#isStopWord(java.lang.String)
+     */
+    public boolean isStopWord(String word) {
+        return (Arrays.binarySearch(words, word) >= 0);
+    }
+
+    @Override
+    public String[] getStopWords() {
+        return words;
+    }
+
 }

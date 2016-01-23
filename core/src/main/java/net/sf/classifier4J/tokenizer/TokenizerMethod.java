@@ -1,4 +1,4 @@
-package net.sf.classifier4J;
+package net.sf.classifier4J.tokenizer;
 
 public enum TokenizerMethod {
     /**
